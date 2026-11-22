@@ -97,4 +97,14 @@ void main() {
     expect(s.userName, 'Masud');
     expect(s.quietStart, const ReminderTime(23, 15));
   });
+
+  test('a failed save is counted so the UI can warn', () async {
+    final store = HabitStore(clock: () => _now, db: db);
+    await db.customSelect('select 1').get(); // open it, so closing makes writes fail
+    await db.close();
+    store.addHabit(Habit(id: 'x', name: 'Read', iconIndex: 0, colorIndex: 0, startDate: _now));
+    await store.flush();
+    expect(store.saveFailures, 1);
+    expect(store.habits.single.name, 'Read', reason: 'the screen keeps the change');
+  });
 }

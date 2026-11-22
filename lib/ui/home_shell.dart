@@ -27,6 +27,7 @@ class _HomeShellState extends State<HomeShell> with SingleTickerProviderStateMix
   final _visited = <int>{0};
   late final AnimationController _fade = AnimationController(vsync: this, value: 1);
   Timer? _midnight;
+  int _shownSaveFailures = 0;
 
   @override
   void initState() {
@@ -69,6 +70,13 @@ class _HomeShellState extends State<HomeShell> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
+    final failures = context.store.saveFailures;
+    if (failures > _shownSaveFailures) {
+      _shownSaveFailures = failures;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) context.showSnack(l.saveFailed);
+      });
+    }
     final showFab = _index == 0 && context.store.habits.isNotEmpty;
     final t = CurvedAnimation(parent: _fade, curve: Motion.settle);
     return Scaffold(

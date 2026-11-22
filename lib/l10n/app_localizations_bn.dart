@@ -1119,6 +1119,10 @@ class AppLocalizationsBn extends AppLocalizations {
       'সর্বশেষ পরিবর্তন ব্যাকআপ করা যায়নি, তাই আপনি এখনও সাইন ইন আছেন। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।';
 
   @override
+  String get saveFailed =>
+      'সর্বশেষ পরিবর্তন এই ফোনে সংরক্ষণ করা যায়নি। অ্যাপ বন্ধ করলে এটি হারিয়ে যেতে পারে।';
+
+  @override
   String get reminderBody => 'এই অভ্যাসের সময় হয়েছে। চেক-ইন করতে ট্যাপ করুন।';
 
   @override

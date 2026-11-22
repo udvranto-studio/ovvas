@@ -1137,6 +1137,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t back up your latest changes, so you\'re still signed in. Check your connection and try again.';
 
   @override
+  String get saveFailed =>
+      'Couldn\'t save your latest change on this phone. It may be lost when the app closes.';
+
+  @override
   String get reminderBody => 'Time for this habit. Tap to check in.';
 
   @override

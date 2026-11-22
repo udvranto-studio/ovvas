@@ -37,6 +37,10 @@ class HabitStore extends ChangeNotifier {
   /// Database writes run one after another in this chain.
   Future<void> _writes = Future.value();
 
+  /// How many database writes failed. The screen shows these changes, but
+  /// they are gone after a restart, so the UI warns when this goes up.
+  int saveFailures = 0;
+
   /// Bumped on every change, so [reload] can tell if memory changed under it.
   int _version = 0;
   int _lastStamp = 0;
@@ -329,6 +333,8 @@ class HabitStore extends ChangeNotifier {
     if (db == null) return;
     _writes = _writes.then((_) => write(db)).catchError((Object e, StackTrace s) {
       debugPrint('Saving failed: $e\n$s');
+      saveFailures++;
+      notifyListeners();
     });
   }
 

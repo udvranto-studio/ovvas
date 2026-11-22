@@ -2072,6 +2072,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t back up your latest changes, so you\'re still signed in. Check your connection and try again.'**
   String get signOutFailed;
 
+  /// No description provided for @saveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your latest change on this phone. It may be lost when the app closes.'**
+  String get saveFailed;
+
   /// No description provided for @reminderBody.
   ///
   /// In en, this message translates to:
