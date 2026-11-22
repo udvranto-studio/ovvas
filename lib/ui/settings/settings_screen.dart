@@ -1,0 +1,435 @@
+import 'package:flutter/material.dart';
+
+import '../../app/app_scope.dart';
+import '../../core/theme/habit_palette.dart';
+import '../../data/settings_controller.dart';
+import '../../domain/habit.dart';
+import '../common/components.dart';
+import '../common/motion.dart';
+import '../common/dialogs.dart';
+import '../common/format.dart';
+import '../today/today_screen.dart' show SyncChip;
+import 'file_transfer.dart';
+import 'privacy_sheets.dart';
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  Future<ReminderTime?> _pickTime(BuildContext context, ReminderTime initial) async {
+    final t = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: initial.hour, minute: initial.minute),
+    );
+    return t == null ? null : ReminderTime(t.hour, t.minute);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final store = context.store;
+    final s = context.settings;
+    final l = context.l10n;
+    final c = context.colors;
+    void soon() => context.showSnack(l.availableWithCloud);
+
+    return SafeArea(
+      bottom: false,
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(16, 16, 16, MediaQuery.paddingOf(context).bottom + 24),
+        children: staggered([
+          Semantics(header: true, child: Text(l.tabSettings, style: Theme.of(context).textTheme.headlineSmall)),
+
+          // Account and backup
+          SectionLabel(l.accountAndBackup),
+          _Group(
+            children: [
+              ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [kHabitColors[Accent.amber.colorIndex], kHabitColors[Accent.coral.colorIndex]],
+                    ),
+                  ),
+                  child: Text(
+                    s.userName.isEmpty ? '?' : s.userName.characters.first.toUpperCase(),
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                  ),
+                ),
+                title: Text(s.userName.isEmpty ? l.yourName : s.userName),
+                subtitle: Text(store.signedIn ? store.accountEmail : l.notSignedIn),
+                trailing: const Icon(Icons.edit_outlined),
+                onTap: () async {
+                  final name = await askText(context, title: l.yourName, initial: s.userName, maxLines: 1);
+                  if (name != null) s.userName = name;
+                },
+              ),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+                child: Align(alignment: AlignmentDirectional.centerStart, child: SyncChip()),
+              ),
+              if (store.signedIn)
+                ListTile(
+                  leading: const IconBadge(Icons.cloud_upload_outlined, Accent.sky),
+                  title: Text(l.backUpNow),
+                  onTap: () async {
+                    final ok = await store.backUpNow();
+                    if (context.mounted) context.showSnack(ok ? l.backedUpJustNow : l.backupFailed);
+                  },
+                )
+              else
+                ListTile(
+                  leading: const IconBadge(Icons.login_rounded, Accent.sky),
+                  title: Text(l.signIn),
+                  subtitle: Text(store.cloud.available ? l.signInHint : l.cloudNotConfigured),
+                  enabled: store.cloud.available,
+                  onTap: () async {
+                    try {
+                      await store.signIn();
+                    } catch (e) {
+                      debugPrint('Sign-in failed: $e');
+                      if (context.mounted) context.showSnack(l.signInFailed);
+                      return;
+                    }
+                    // On phones the browser sign-in finishes later; the screen updates then.
+                    if (context.mounted && store.signedIn) context.showSnack(l.signedInMessage);
+                  },
+                ),
+              ListTile(leading: const IconBadge(Icons.restore_rounded, Accent.violet), title: Text(l.restore), onTap: soon),
+              ListTile(
+                leading: const IconBadge(Icons.file_download_outlined, Accent.sky),
+                title: Text(l.exportData),
+                subtitle: Text(l.exportFormats),
+                onTap: () => exportPdf(context),
+              ),
+              ListTile(
+                leading: const IconBadge(Icons.file_upload_outlined, Accent.violet),
+                title: Text(l.importData),
+                onTap: () => importPdf(context),
+              ),
+            ],
+          ),
+
+          // Reminders
+          SectionLabel(l.reminders),
+          _Group(
+            children: [
+              ListTile(
+                leading: const IconBadge(Icons.alarm_rounded, Accent.amber),
+                title: Text(l.defaultReminderTime),
+                trailing: Text(formatTime(context, s.defaultReminder), style: TextStyle(color: c.textSecondary)),
+                onTap: () async {
+                  final t = await _pickTime(context, s.defaultReminder);
+                  if (t != null) s.defaultReminder = t;
+                },
+              ),
+              ListTile(
+                leading: const IconBadge(Icons.bedtime_outlined, Accent.violet),
+                title: Text(l.quietHours),
+                subtitle: Text('${formatTime(context, s.quietStart)} – ${formatTime(context, s.quietEnd)}'),
+                onTap: () async {
+                  final start = await _pickTime(context, s.quietStart);
+                  if (start == null || !context.mounted) return;
+                  final end = await _pickTime(context, s.quietEnd);
+                  if (end == null) return;
+                  s.quietStart = start;
+                  s.quietEnd = end;
+                },
+              ),
+              SwitchListTile(
+                secondary: const IconBadge(Icons.summarize_outlined, Accent.sky),
+                title: Text(l.dailySummary),
+                subtitle: Text(l.dailySummaryHint),
+                value: s.dailySummary,
+                onChanged: (v) => s.dailySummary = v,
+              ),
+              SwitchListTile(
+                secondary: const IconBadge(Icons.insights_outlined, Accent.violet),
+                title: Text(l.weeklyReport),
+                subtitle: Text(l.weeklyReportHint),
+                value: s.weeklyReport,
+                onChanged: (v) => s.weeklyReport = v,
+              ),
+            ],
+          ),
+
+          // Appearance
+          SectionLabel(l.appearance),
+          _Group(
+            padding: const EdgeInsets.all(16),
+            children: [
+              Text(l.theme, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 10),
+              PillSegmented<ThemeMode>(
+                value: s.themeMode,
+                options: [
+                  (ThemeMode.system, l.themeDevice),
+                  (ThemeMode.light, l.themeLight),
+                  (ThemeMode.dark, l.themeDark),
+                ],
+                onChanged: (v) => s.themeMode = v,
+              ),
+              const SizedBox(height: 20),
+              Text(l.textSize, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 10),
+              PillSegmented<double>(
+                value: s.textScale,
+                options: [
+                  (SettingsController.textScales[0], l.textNormal),
+                  (SettingsController.textScales[1], l.textLarge),
+                  (SettingsController.textScales[2], l.textExtraLarge),
+                ],
+                onChanged: (v) => s.textScale = v,
+              ),
+            ],
+          ),
+
+          // Preferences
+          SectionLabel(l.preferences),
+          _Group(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l.language, style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 10),
+                    PillSegmented<String>(
+                      value: s.locale.languageCode,
+                      options: const [('en', 'English'), ('bn', 'বাংলা')],
+                      onChanged: (v) => s.locale = Locale(v),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(l.weekStarts, style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 10),
+                    PillSegmented<int>(
+                      value: s.firstWeekday,
+                      options: [
+                        (DateTime.monday, weekdayLong(context, DateTime.monday)),
+                        (DateTime.sunday, weekdayLong(context, DateTime.sunday)),
+                      ],
+                      onChanged: (v) => s.firstWeekday = v,
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+              SwitchListTile(
+                secondary: const IconBadge(Icons.vibration_rounded, Accent.coral),
+                title: Text(l.haptics),
+                value: s.haptics,
+                onChanged: (v) => s.haptics = v,
+              ),
+              SwitchListTile(
+                secondary: const IconBadge(Icons.animation_rounded, Accent.rose),
+                title: Text(l.animations),
+                value: s.animations,
+                onChanged: (v) => s.animations = v,
+              ),
+              SwitchListTile(
+                secondary: const IconBadge(Icons.celebration_outlined, Accent.amber),
+                title: Text(l.celebrations),
+                subtitle: Text(l.celebrationsHint),
+                value: s.celebrations,
+                onChanged: (v) => s.celebrations = v,
+              ),
+            ],
+          ),
+
+          // Habits
+          SectionLabel(l.habits),
+          _Group(
+            children: [
+              ListTile(
+                leading: const IconBadge(Icons.archive_outlined, Accent.coral),
+                title: Text(l.archivedHabits),
+                trailing: Text('${store.archivedHabits.length}', style: TextStyle(color: c.textSecondary)),
+                onTap: () =>
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ArchivedHabitsScreen())),
+              ),
+            ],
+          ),
+
+          // Plus: one quiet card.
+          const SizedBox(height: 24),
+          AppCard(
+            color: c.mint,
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset('assets/brand/logo_mark.png', width: 44, height: 44, excludeFromSemantics: true),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l.plusTitle,
+                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: c.onMint),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(l.plusBody, style: TextStyle(color: c.onMint, fontSize: 14)),
+                    ],
+                  ),
+                ),
+                // Flexible so large text wraps instead of overflowing on narrow phones.
+                Flexible(
+                  child: TextButton(
+                    onPressed: soon,
+                    child: Text(l.learnMore, textAlign: TextAlign.center),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Privacy
+          SectionLabel(l.privacy),
+          _Group(
+            children: [
+              ListTile(
+                leading: const IconBadge(Icons.shield_outlined, Accent.sky),
+                title: Text(l.whatWeStore),
+                onTap: () => showWhatWeStore(context),
+              ),
+              ListTile(
+                leading: const IconBadge(Icons.policy_outlined, Accent.sky),
+                title: Text(l.privacyPolicy),
+                onTap: () => showPrivacyPolicy(context),
+              ),
+              if (store.signedIn)
+                ListTile(
+                  leading: const IconBadge(Icons.logout_rounded, Accent.rose),
+                  title: Text(l.signOut),
+                  onTap: () async {
+                    final ok = await confirmAction(
+                      context,
+                      title: l.signOutTitle,
+                      message: l.signOutBody,
+                      confirmLabel: l.signOut,
+                    );
+                    if (!ok || !context.mounted) return;
+                    await store.signOut();
+                    if (context.mounted) context.showSnack(l.signedOutMessage);
+                  },
+                ),
+              ListTile(
+                leading: Icon(Icons.delete_forever_outlined, color: c.danger),
+                title: Text(l.deleteAccount, style: TextStyle(color: c.danger)),
+                onTap: () async {
+                  final ok = await confirmAction(
+                    context,
+                    title: l.deleteAccountTitle,
+                    message: l.deleteAccountBody,
+                    confirmLabel: l.delete,
+                    destructive: true,
+                  );
+                  if (!ok || !context.mounted) return;
+                  try {
+                    await store.deleteAllData();
+                  } catch (e) {
+                    debugPrint('Deleting account failed: $e');
+                    if (context.mounted) context.showSnack(l.deleteAccountFailed);
+                    return;
+                  }
+                  s.reset();
+                  if (context.mounted) context.showSnack(l.accountDeleted);
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Center(
+            child: Text(l.versionLabel('1.0.0'), style: TextStyle(color: c.textSecondary, fontSize: 12)),
+          ),
+          const SizedBox(height: 4),
+          Center(
+            child: Text(l.noAdsPromise, style: TextStyle(color: c.textSecondary, fontSize: 12)),
+          ),
+        ]),
+      ),
+    );
+  }
+}
+
+/// Settings rows grouped on one card.
+class _Group extends StatelessWidget {
+  const _Group({required this.children, this.padding = EdgeInsets.zero});
+
+  final List<Widget> children;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      padding: padding,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
+    );
+  }
+}
+
+/// Archived habits keep their history and can be restored.
+class ArchivedHabitsScreen extends StatelessWidget {
+  const ArchivedHabitsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final store = context.store;
+    final l = context.l10n;
+    final habits = store.archivedHabits;
+    return Scaffold(
+      appBar: AppBar(title: Text(l.archivedHabits)),
+      body: habits.isEmpty
+          ? Center(
+              child: EmptyState(icon: Icons.archive_outlined, title: l.noArchivedTitle, message: l.noArchivedBody),
+            )
+          : ListView(
+              padding: const EdgeInsets.all(16),
+              children: staggered([
+                for (final h in habits)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: AppCard(
+                      padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                      child: Row(
+                        children: [
+                          HabitAvatar.of(h, size: 40),
+                          const SizedBox(width: 12),
+                          Expanded(child: Text(h.name, style: Theme.of(context).textTheme.titleMedium)),
+                          TextButton(
+                            onPressed: () {
+                              store.setArchived(h.id, false);
+                              context.showSnack(l.habitRestored(h.name));
+                            },
+                            child: Text(l.restore),
+                          ),
+                          IconButton(
+                            tooltip: l.deleteHabit,
+                            icon: Icon(Icons.delete_outline_rounded, color: context.colors.danger),
+                            onPressed: () async {
+                              final ok = await confirmAction(
+                                context,
+                                title: l.deleteHabitTitle(h.name),
+                                message: l.deleteHabitBody,
+                                confirmLabel: l.delete,
+                                destructive: true,
+                              );
+                              if (ok) store.deleteHabit(h.id);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ]),
+            ),
+    );
+  }
+}
