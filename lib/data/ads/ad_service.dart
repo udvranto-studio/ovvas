@@ -95,8 +95,8 @@ class AdService extends ChangeNotifier {
     notifyListeners();
     unawaited(pro.start());
     _checkIns?.addListener(_quietAfterChange);
-    _cloud?.addListener(_syncFirstSeen);
     if (!supported) return;
+    _cloud?.addListener(_syncFirstSeen);
     _lifecycle = AppLifecycleListener(onResume: _refresh);
     await _refresh();
     unawaited(_syncFirstSeen());
@@ -113,14 +113,21 @@ class AdService extends ChangeNotifier {
     await _initSdkIfAllowed();
   }
 
-  bool _syncingFirstSeen = false;
+  /// The account whose first launch was already synced. The cloud notifies
+  /// on every sync, but this needs to run once per sign-in.
+  String? _firstSeenSyncedFor;
 
   Future<void> _syncFirstSeen() async {
     final cloud = _cloud;
-    if (cloud == null || !cloud.signedIn || _syncingFirstSeen) return;
-    _syncingFirstSeen = true;
+    if (cloud == null || !cloud.signedIn) {
+      _firstSeenSyncedFor = null;
+      return;
+    }
+    if (_firstSeenSyncedFor == cloud.accountEmail) return;
+    // Set before waiting, so overlapping calls don't repeat the request.
+    // If it fails, it is tried again at the next sign-in or app start.
+    _firstSeenSyncedFor = cloud.accountEmail;
     final remote = await cloud.syncFirstSeen(_firstSeen);
-    _syncingFirstSeen = false;
     if (remote == null || !remote.isBefore(_firstSeen)) return;
     _firstSeen = remote;
     await _db?.writeValue(_firstSeenKey, '${remote.millisecondsSinceEpoch}');

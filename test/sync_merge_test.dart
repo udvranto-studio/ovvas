@@ -59,4 +59,30 @@ void main() {
       '2026-10-22': (2, false),
     });
   });
+
+  group('switching accounts on one phone', () {
+    Future<void> ownedBy(String user) => db.writeValue('sync.owner', user);
+
+    test('unsent edits move to the next account after a normal sign-out', () async {
+      await ownedBy('a');
+      expect(await sync.claimOwner('b'), isFalse);
+      expect((await habit()).dirty, isTrue, reason: 'uploaded to the new account, not lost');
+    });
+
+    test('after "sign out anyway" another account never gets them', () async {
+      await ownedBy('a');
+      await db.writeValue(SupabaseCloudSync.forcedOutKey, 'true');
+      expect(await sync.claimOwner('b'), isTrue);
+      expect(await db.select(db.habits).get(), isEmpty);
+      expect(await db.readValue(SupabaseCloudSync.forcedOutKey), isNull);
+    });
+
+    test('after "sign out anyway" the same account keeps and uploads them', () async {
+      await ownedBy('a');
+      await db.writeValue(SupabaseCloudSync.forcedOutKey, 'true');
+      expect(await sync.claimOwner('a'), isFalse);
+      expect((await habit()).dirty, isTrue);
+      expect(await db.readValue(SupabaseCloudSync.forcedOutKey), isNull);
+    });
+  });
 }

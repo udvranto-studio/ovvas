@@ -248,7 +248,9 @@ class _StatsScreenState extends State<StatsScreen> {
               padding: const EdgeInsets.only(bottom: 10),
               child: _HabitRow(stat: s),
             ),
-          const AdBanner(placement: AdPlacement.statsBanner),
+          // Keyed, so adding or removing habit rows above keeps the loaded ad
+          // instead of starting a new request.
+          const AdBanner(key: ValueKey('ad'), placement: AdPlacement.statsBanner),
         ]),
       ),
     );

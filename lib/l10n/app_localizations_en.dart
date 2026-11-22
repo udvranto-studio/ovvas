@@ -1135,8 +1135,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t delete your account. Check your connection and try again.';
 
   @override
-  String get signOutFailed =>
-      'Couldn\'t back up your latest changes, so you\'re still signed in. Check your connection and try again.';
+  String get signOutAnywayTitle => 'Couldn\'t back up';
+
+  @override
+  String get signOutAnywayBody =>
+      'Your latest changes aren\'t in your backup yet. If you sign out now, they stay on this phone and upload when this account signs in again. If a different account signs in here, they are removed.';
+
+  @override
+  String get signOutAnyway => 'Sign out anyway';
 
   @override
   String get saveFailed =>

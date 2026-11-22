@@ -2066,11 +2066,23 @@ abstract class AppLocalizations {
   /// **'Couldn\'t delete your account. Check your connection and try again.'**
   String get deleteAccountFailed;
 
-  /// No description provided for @signOutFailed.
+  /// No description provided for @signOutAnywayTitle.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t back up your latest changes, so you\'re still signed in. Check your connection and try again.'**
-  String get signOutFailed;
+  /// **'Couldn\'t back up'**
+  String get signOutAnywayTitle;
+
+  /// No description provided for @signOutAnywayBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your latest changes aren\'t in your backup yet. If you sign out now, they stay on this phone and upload when this account signs in again. If a different account signs in here, they are removed.'**
+  String get signOutAnywayBody;
+
+  /// No description provided for @signOutAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out anyway'**
+  String get signOutAnyway;
 
   /// No description provided for @saveFailed.
   ///

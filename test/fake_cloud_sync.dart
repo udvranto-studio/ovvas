@@ -23,7 +23,7 @@ class FakeCloudSync extends CloudSync {
   }
 
   @override
-  Future<void> signOut() async {
+  Future<void> signOut({bool force = false}) async {
     _signedIn = false;
     _lastBackup = null;
     notifyListeners();

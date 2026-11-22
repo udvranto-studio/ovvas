@@ -53,15 +53,34 @@ class ProManager extends ChangeNotifier {
     if (!supported) return;
     try {
       final iap = InAppPurchase.instance;
-      _sub = iap.purchaseStream.listen(_onPurchases, onError: (Object e) => debugPrint('Purchase stream: $e'));
+      _sub = iap.purchaseStream.listen(onPurchases, onError: (Object e) => debugPrint('Purchase stream: $e'));
       if (!await iap.isAvailable()) return;
       await refresh();
       final r = await iap.queryProductDetails(productIds);
-      products = [...r.productDetails]..sort((a, b) => a.rawPrice.compareTo(b.rawPrice));
+      products = onePerProduct(r.productDetails);
       notifyListeners();
     } catch (e, s) {
       debugPrint('Billing unavailable: $e\n$s');
     }
+  }
+
+  /// One entry per product, cheapest first. Google Play returns a
+  /// subscription once per offer (e.g. a free trial too); keep the base plan,
+  /// so the sheet shows one honest yearly price.
+  @visibleForTesting
+  static List<ProductDetails> onePerProduct(List<ProductDetails> all) {
+    bool isBasePlan(ProductDetails p) {
+      if (p is! GooglePlayProductDetails) return true;
+      final offers = p.productDetails.subscriptionOfferDetails;
+      final i = p.subscriptionIndex;
+      return offers == null || i == null || offers[i].offerId == null;
+    }
+
+    final byId = <String, ProductDetails>{};
+    for (final p in all) {
+      if (!byId.containsKey(p.id) || isBasePlan(p)) byId[p.id] = p;
+    }
+    return byId.values.toList()..sort((a, b) => a.rawPrice.compareTo(b.rawPrice));
   }
 
   /// Asks Google Play what this account owns. Returns false, keeping the
@@ -93,17 +112,22 @@ class ProManager extends ChangeNotifier {
     buying = true;
     purchaseFailed = false;
     notifyListeners();
+    var started = false;
     try {
-      await InAppPurchase.instance.buyNonConsumable(purchaseParam: PurchaseParam(productDetails: product));
+      started = await InAppPurchase.instance.buyNonConsumable(purchaseParam: PurchaseParam(productDetails: product));
     } catch (e) {
       debugPrint('Purchase failed to start: $e');
+    }
+    // Nothing will arrive on the purchase stream, so re-enable the buttons.
+    if (!started) {
       buying = false;
       purchaseFailed = true;
       notifyListeners();
     }
   }
 
-  Future<void> _onPurchases(List<PurchaseDetails> purchases) async {
+  @visibleForTesting
+  Future<void> onPurchases(List<PurchaseDetails> purchases) async {
     for (final p in purchases) {
       if (!productIds.contains(p.productID)) continue;
       switch (p.status) {
@@ -116,7 +140,9 @@ class ProManager extends ChangeNotifier {
         case PurchaseStatus.canceled:
           buying = false;
         case PurchaseStatus.pending:
-          break;
+          // Waiting for payment (e.g. cash). Pro turns on when it arrives,
+          // on this stream or at the next check, so free the buttons now.
+          buying = false;
       }
       // Unacknowledged Play purchases are refunded after 3 days.
       if (p.pendingCompletePurchase) await InAppPurchase.instance.completePurchase(p);
