@@ -215,8 +215,12 @@ class HabitStore extends ChangeNotifier {
 
   Future<void> signIn() => cloud.signIn();
 
-  /// Local data stays; backups stop until signing in again.
-  Future<void> signOut() => cloud.signOut();
+  /// Local data stays; backups stop until signing in again. Throws, staying
+  /// signed in, if the last changes could not be backed up.
+  Future<void> signOut() async {
+    await flush();
+    await cloud.signOut();
+  }
 
   Future<bool> backUpNow() async {
     await flush();

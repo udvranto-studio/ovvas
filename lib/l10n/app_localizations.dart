@@ -2066,6 +2066,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t delete your account. Check your connection and try again.'**
   String get deleteAccountFailed;
 
+  /// No description provided for @signOutFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t back up your latest changes, so you\'re still signed in. Check your connection and try again.'**
+  String get signOutFailed;
+
   /// No description provided for @reminderBody.
   ///
   /// In en, this message translates to:

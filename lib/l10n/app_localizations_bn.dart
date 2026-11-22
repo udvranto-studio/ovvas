@@ -1115,6 +1115,10 @@ class AppLocalizationsBn extends AppLocalizations {
       'অ্যাকাউন্ট মোছা যায়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।';
 
   @override
+  String get signOutFailed =>
+      'সর্বশেষ পরিবর্তন ব্যাকআপ করা যায়নি, তাই আপনি এখনও সাইন ইন আছেন। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।';
+
+  @override
   String get reminderBody => 'এই অভ্যাসের সময় হয়েছে। চেক-ইন করতে ট্যাপ করুন।';
 
   @override

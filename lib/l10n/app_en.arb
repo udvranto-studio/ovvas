@@ -674,6 +674,7 @@
   "greetingEveningPlain": "Good evening",
   "accountDeleted": "Your account and data were deleted.",
   "deleteAccountFailed": "Couldn't delete your account. Check your connection and try again.",
+  "signOutFailed": "Couldn't back up your latest changes, so you're still signed in. Check your connection and try again.",
   "reminderBody": "Time for this habit. Tap to check in.",
   "dailySummaryBody": "{done} of {total} habits done today",
   "@dailySummaryBody": {

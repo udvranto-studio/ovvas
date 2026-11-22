@@ -19,7 +19,8 @@ abstract class CloudSync extends ChangeNotifier {
   /// later, when the user comes back to the app.
   Future<void> signIn();
 
-  /// Signs out. Data stays on the phone.
+  /// Uploads what is left, then signs out. Data stays on the phone. Throws,
+  /// staying signed in, if the upload failed.
   Future<void> signOut();
 
   /// Deletes the account and its cloud data, then signs out. Does nothing

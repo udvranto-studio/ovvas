@@ -1133,6 +1133,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t delete your account. Check your connection and try again.';
 
   @override
+  String get signOutFailed =>
+      'Couldn\'t back up your latest changes, so you\'re still signed in. Check your connection and try again.';
+
+  @override
   String get reminderBody => 'Time for this habit. Tap to check in.';
 
   @override

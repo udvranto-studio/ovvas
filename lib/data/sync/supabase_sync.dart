@@ -150,8 +150,9 @@ class SupabaseCloudSync extends CloudSync {
     _debounce?.cancel();
     // Last upload, so this account's backup has everything. Data stays on
     // the phone; see [_claimOwner] for what happens when another account
-    // signs in.
-    await syncNow();
+    // signs in. If it fails, stay signed in: otherwise the unsent changes
+    // would be merged into the next account that signs in on this phone.
+    if (!await syncNow()) throw const AuthException('Could not back up before signing out.');
     await _auth.signOut();
     await _forgetSync();
   }
@@ -180,8 +181,9 @@ class SupabaseCloudSync extends CloudSync {
   /// Makes sure this phone's data belongs to [userId] before syncing. When
   /// another account signs in, the previous account's data is removed from
   /// the phone (it is in that account's backup), so it never leaks into the
-  /// new account. If some of it never got uploaded, it is merged instead so
-  /// nothing is lost. Returns true when local data was removed.
+  /// new account. Sign-out only succeeds after a full upload, so unsent rows
+  /// here are edits made while signed out; they are merged into the new
+  /// account so nothing is lost. Returns true when local data was removed.
   Future<bool> _claimOwner(String userId) async {
     final owner = await _db.readValue(_ownerKey);
     if (owner == userId) return false;
