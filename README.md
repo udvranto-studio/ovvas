@@ -66,7 +66,7 @@ dart run build_runner build
 Optional. Without it, everything works and stays on the phone.
 
 1. Create a project at [supabase.com](https://supabase.com).
-2. Run [supabase/migrations/20261108000000_ovvas_sync.sql](supabase/migrations/20261108000000_ovvas_sync.sql) in the SQL editor (or `supabase db push` with the Supabase CLI). It creates the tables and the rules that keep each user's data private.
+2. Run every file in [supabase/migrations/](supabase/migrations/), oldest first, in the SQL editor (or `supabase db push` with the Supabase CLI). It creates the tables and the rules that keep each user's data private.
 3. Turn on Google sign-in: **Authentication → Sign In / Providers → Google**, using a Google Cloud OAuth client ID and secret.
 4. Under **Authentication → URL Configuration → Redirect URLs**, add both:
    - `ovvas://login-callback` (Android and iOS)
