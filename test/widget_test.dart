@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart' show AdWidget;
 import 'package:ovvas/app/app.dart';
 import 'package:ovvas/data/habit_store.dart';
 import 'package:ovvas/data/sample_data.dart';
@@ -172,6 +173,22 @@ void main() {
     await tester.tap(find.text('Sign in with Google'));
     await tester.pumpAndSettle();
     expect(find.text('Backed up just now'), findsWidgets);
+  });
+
+  testWidgets('ads stay off by default and premium widget styles are locked', (tester) async {
+    await _pumpApp(tester);
+    expect(find.byType(AdWidget), findsNothing, reason: 'no banner until the server turns ads on');
+
+    await tester.tap(_tab(Icons.widgets_outlined));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.checklist_rounded).first);
+    await tester.pumpAndSettle();
+    final gradient = find.text('Gradient · Pro');
+    await tester.ensureVisible(gradient);
+    await tester.pumpAndSettle();
+    await tester.tap(gradient);
+    await tester.pump();
+    expect(find.text('This style comes with Ovvas Pro.'), findsOneWidget);
   });
 
   testWidgets('empty state offers to add the first habit', (tester) async {

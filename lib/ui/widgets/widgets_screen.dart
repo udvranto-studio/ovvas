@@ -35,7 +35,7 @@ class WidgetsScreen extends StatelessWidget {
   Future<void> _create(BuildContext context, WidgetKind kind) async {
     final store = context.store;
     final l = context.l10n;
-    if (!store.canAddWidget) {
+    if (!store.canAddWidget(pro: context.ads.pro.active)) {
       await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -88,7 +88,7 @@ class WidgetsScreen extends StatelessWidget {
           if (widgets.isNotEmpty) ...[
             SectionLabel(
               l.myWidgets,
-              trailing: store.isPlus
+              trailing: context.ads.pro.active
                   ? null
                   : Text(
                       l.widgetsUsed(widgets.length, HabitStore.freeWidgetLimit),

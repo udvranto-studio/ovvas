@@ -45,9 +45,6 @@ class HabitStore extends ChangeNotifier {
   int _version = 0;
   int _lastStamp = 0;
 
-  // TODO: set from the subscription service (step 3).
-  bool isPlus = false;
-
   static const freeWidgetLimit = 3;
 
   /// Where weeks start, for weekly-quota habits. Kept in step with settings by the app.
@@ -185,7 +182,7 @@ class HabitStore extends ChangeNotifier {
   // ---- Widgets ----
 
   List<WidgetConfig> get widgets => List.unmodifiable(_widgets);
-  bool get canAddWidget => isPlus || _widgets.length < freeWidgetLimit;
+  bool canAddWidget({required bool pro}) => pro || _widgets.length < freeWidgetLimit;
   String newWidgetId() => newUuid();
 
   void saveWidget(WidgetConfig w) {

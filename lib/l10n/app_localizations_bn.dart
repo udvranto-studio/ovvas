@@ -617,7 +617,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String widgetLimitBody(int limit) {
-    return 'ফ্রি সংস্করণে সব অপশনসহ $limitটি উইজেট আছে। নতুন যোগ করতে একটি সরান, অথবা সীমাহীন উইজেটের জন্য Plus নিন।';
+    return 'ফ্রি সংস্করণে সব অপশনসহ $limitটি উইজেট আছে। নতুন যোগ করতে একটি সরান, অথবা সীমাহীন উইজেটের জন্য Pro নিন।';
   }
 
   @override
@@ -916,11 +916,11 @@ class AppLocalizationsBn extends AppLocalizations {
       'আর্কাইভ করা অভ্যাসের ইতিহাস থাকে, যেকোনো সময় ফিরিয়ে আনা যায়।';
 
   @override
-  String get plusTitle => 'হ্যাবিটো Plus';
+  String get proTitle => 'Ovvas Pro';
 
   @override
-  String get plusBody =>
-      'সীমাহীন উইজেট। এককালীন বা বার্ষিক। বিজ্ঞাপন কখনও নয়।';
+  String get proBody =>
+      'বিজ্ঞাপন নেই, সীমাহীন উইজেট ও প্রিমিয়াম উইজেট স্টাইল। বার্ষিক বা এককালীন।';
 
   @override
   String get learnMore => 'আরও জানুন';
@@ -964,7 +964,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get storeNeverBody =>
-      'কোনো বিজ্ঞাপন, অ্যানালিটিক্স, ট্র্যাকার বা ক্র্যাশ রিপোর্টিং নেই। লোকেশন, কন্টাক্ট, ছবি, ক্যামেরা বা মাইক্রোফোন নয়। আপনার তথ্য কখনো বিক্রি বা শেয়ার করা হয় না।';
+      'কোনো অ্যানালিটিক্স, বাড়তি ট্র্যাকার বা ক্র্যাশ রিপোর্টিং নেই। লোকেশন, কন্টাক্ট, ছবি, ক্যামেরা বা মাইক্রোফোন নয়। আপনার অভ্যাস ও নোট কখনো বিক্রি, শেয়ার বা বিজ্ঞাপনে ব্যবহার করা হয় না।';
 
   @override
   String get storeExportTitle => 'যে ফাইল আপনি এক্সপোর্ট করেন';
@@ -990,14 +990,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get policyCollectBody =>
-      '• অ্যাকাউন্ট ছাড়া: কিছুই আপনার ফোনের বাইরে যায় না। অভ্যাস, চেক-ইন, নোট, উইজেট ও সেটিংস শুধু আপনার ডিভাইসে থাকে।\n• অ্যাকাউন্টসহ: আপনার ইমেইল ঠিকানা ও সাধারণ Google প্রোফাইল (নাম ও ছবি), এবং আপনার তৈরি অভ্যাস, চেক-ইন, নোট ও উইজেটের লেআউট।\n• আমরা লোকেশন, কন্টাক্ট, ছবি, ডিভাইস আইডি, ব্যবহারের অ্যানালিটিক্স বা বিজ্ঞাপনের তথ্য সংগ্রহ করি না।';
+      '• অ্যাকাউন্ট ছাড়া: আপনার অভ্যাস, চেক-ইন, নোট, উইজেট ও সেটিংস শুধু আপনার ডিভাইসে থাকে।\n• অ্যাকাউন্টসহ: আপনার ইমেইল ঠিকানা ও সাধারণ Google প্রোফাইল (নাম ও ছবি), এবং আপনার তৈরি অভ্যাস, চেক-ইন, নোট ও উইজেটের লেআউট।\n• বিজ্ঞাপন (Android-এ ফ্রি সংস্করণ): আমাদের বিজ্ঞাপন সেবা Google AdMob আপনার সম্মতি অনুযায়ী আপনার ডিভাইসের বিজ্ঞাপন আইডি, IP ঠিকানা থেকে আনুমানিক লোকেশন এবং বিজ্ঞাপনে আপনার প্রতিক্রিয়া সংগ্রহ করে। Ovvas Pro-তে কোনো বিজ্ঞাপন নেই।\n• আমরা নিজেরা লোকেশন, কন্টাক্ট, ছবি বা ব্যবহারের অ্যানালিটিক্স সংগ্রহ করি না।';
 
   @override
   String get policyUseTitle => '২. তথ্য কীভাবে ব্যবহার করি';
 
   @override
   String get policyUseBody =>
-      'শুধু অ্যাপ চালানোর জন্য: আপনার অভ্যাস ও পরিসংখ্যান দেখাতে, আর সাইন ইন করলে আপনার তথ্য ব্যাকআপ করতে ও আপনার ফোনগুলোর মধ্যে মিলিয়ে রাখতে। বিজ্ঞাপন বা প্রোফাইলিংয়ের জন্য আপনার তথ্য ব্যবহার করি না, আর আপনার নোট পড়ি না।';
+      'শুধু অ্যাপ চালানোর জন্য: আপনার অভ্যাস ও পরিসংখ্যান দেখাতে, আর সাইন ইন করলে আপনার তথ্য ব্যাকআপ করতে ও আপনার ফোনগুলোর মধ্যে মিলিয়ে রাখতে। বিজ্ঞাপন বেছে নেয় Google AdMob, আপনার অভ্যাস বা নোট থেকে কখনও নয়। প্রোফাইলিংয়ের জন্য আপনার তথ্য ব্যবহার করি না, আর আপনার নোট পড়ি না।';
 
   @override
   String get policyStorageTitle => '৩. তথ্য কোথায় থাকে ও কীভাবে সুরক্ষিত';
@@ -1011,7 +1011,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get policySharingBody =>
-      'আমরা কখনো আপনার তথ্য বিক্রি, ভাড়া বা বিনিময় করি না। অ্যাপ চালাতে শুধু এই সেবাগুলোর ওপর নির্ভর করি:\n• Supabase: অ্যাকাউন্টে সাইন ইন ও ব্যাকআপ রাখা।\n• Google: Google অ্যাকাউন্ট দিয়ে সাইন ইন।\n• Google Play বা App Store: Ovvas Plus-এর পেমেন্ট। আপনার কার্ডের তথ্য আমরা কখনো দেখি না।\nশুধু আইন বাধ্য করলেই আমরা তথ্য প্রকাশ করতে পারি।';
+      'আমরা কখনো আপনার তথ্য বিক্রি, ভাড়া বা বিনিময় করি না। অ্যাপ চালাতে শুধু এই সেবাগুলোর ওপর নির্ভর করি:\n• Supabase: অ্যাকাউন্টে সাইন ইন ও ব্যাকআপ রাখা।\n• Google: Google অ্যাকাউন্ট দিয়ে সাইন ইন।\n• Google AdMob: আপনার সম্মতি অনুযায়ী Android-এর ফ্রি সংস্করণে বিজ্ঞাপন দেখানো ও পরিমাপ করা। সেটিংস → বিজ্ঞাপনের গোপনীয়তা পছন্দ থেকে যেকোনো সময় বদলাতে পারেন।\n• Google Play: Ovvas Pro-এর পেমেন্ট। আপনার কার্ডের তথ্য আমরা কখনো দেখি না।\nশুধু আইন বাধ্য করলেই আমরা তথ্য প্রকাশ করতে পারি।';
 
   @override
   String get policyRetentionTitle => '৫. তথ্য রাখা ও মুছে ফেলা';
@@ -1074,7 +1074,8 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get noAdsPromise => 'বিজ্ঞাপন নেই। ট্র্যাকার নেই। কখনও না।';
+  String get adsPromise =>
+      'শুধু আজ ও পরিসংখ্যান পাতায় ছোট বিজ্ঞাপন, চেক-ইনের সময় কখনও না। Ovvas Pro সেগুলো সরিয়ে দেয়।';
 
   @override
   String get signIn => 'Google দিয়ে সাইন ইন';
@@ -1134,4 +1135,101 @@ class AppLocalizationsBn extends AppLocalizations {
   String weeklyReportBody(int percent) {
     return 'গত সপ্তাহে: আপনার $percent% অভ্যাস সম্পন্ন হয়েছে।';
   }
+
+  @override
+  String get adLabel => 'বিজ্ঞাপন';
+
+  @override
+  String get rewardsTitle => 'পুরস্কার';
+
+  @override
+  String get rewardsSubtitle => 'প্রিমিয়াম উইজেট স্টাইল আনলক করুন';
+
+  @override
+  String get rewardsIntro =>
+      'প্রিমিয়াম উইজেট স্টাইল আনলক করতে একটি ছোট ভিডিও দেখুন। এটা সবসময় ঐচ্ছিক: Ovvas-এর বাকি সবকিছু ফ্রি থাকে।';
+
+  @override
+  String get rewardStylesTitle => 'প্রিমিয়াম উইজেট স্টাইল';
+
+  @override
+  String rewardStylesBody(int hours) {
+    return 'প্রতি ভিডিওতে $hours ঘণ্টার জন্য আপনার উইজেটে অ্যাকসেন্ট থিম ও গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড।';
+  }
+
+  @override
+  String rewardProgress(int views, int total) {
+    return '$totalটির মধ্যে $viewsটি ভিডিও দেখা হয়েছে। $totalটি হলে স্টাইলগুলো চিরতরে আনলক থাকবে।';
+  }
+
+  @override
+  String rewardUnlockedUntil(String time) {
+    return '$time পর্যন্ত আনলক';
+  }
+
+  @override
+  String get rewardUnlockedForever => 'চিরতরে আনলক';
+
+  @override
+  String get watchVideo => 'ভিডিও দেখুন';
+
+  @override
+  String videosLeftToday(int count) {
+    return 'আজ আর $countটি ভিডিও বাকি';
+  }
+
+  @override
+  String get dailyLimitReached => 'আজকের মতো এটুকুই। আরও দেখতে কাল আসুন।';
+
+  @override
+  String get adNotAvailable => 'পরে আবার চেষ্টা করুন';
+
+  @override
+  String get retry => 'আবার চেষ্টা';
+
+  @override
+  String get rewardGranted =>
+      'আনলক হয়েছে! আপনার প্রিমিয়াম উইজেট স্টাইল তৈরি।';
+
+  @override
+  String get proActive =>
+      'আপনার Ovvas Pro আছে। Ovvas-কে সমর্থন করার জন্য ধন্যবাদ!';
+
+  @override
+  String get getPro => 'Pro নিন';
+
+  @override
+  String get restorePurchases => 'কেনাকাটা পুনরুদ্ধার';
+
+  @override
+  String get restoreDone => 'কেনাকাটা পুনরুদ্ধার হয়েছে।';
+
+  @override
+  String get restoreNone =>
+      'এই Google অ্যাকাউন্টে কোনো Ovvas Pro কেনাকাটা পাওয়া যায়নি।';
+
+  @override
+  String get storeUnavailable =>
+      'Google Play এখন পাওয়া যাচ্ছে না। পরে আবার চেষ্টা করুন।';
+
+  @override
+  String get purchaseFailed => 'কেনাকাটা সম্পন্ন হয়নি। আবার চেষ্টা করুন।';
+
+  @override
+  String get proOnlyStyle => 'এই স্টাইলটি Ovvas Pro-এর সাথে পাওয়া যায়।';
+
+  @override
+  String get unlock => 'আনলক';
+
+  @override
+  String get proTag => 'Pro';
+
+  @override
+  String get adPrivacyOptions => 'বিজ্ঞাপনের গোপনীয়তা পছন্দ';
+
+  @override
+  String get proYearly => 'বার্ষিক';
+
+  @override
+  String get proOneTime => 'এককালীন';
 }

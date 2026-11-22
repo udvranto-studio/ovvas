@@ -618,7 +618,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String widgetLimitBody(int limit) {
-    return 'The free version includes $limit widgets with every option. Remove one to add another, or get Plus for unlimited widgets.';
+    return 'The free version includes $limit widgets with every option. Remove one to add another, or get Pro for unlimited widgets.';
   }
 
   @override
@@ -930,10 +930,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Archived habits keep their history and can come back anytime.';
 
   @override
-  String get plusTitle => 'Ovvas Plus';
+  String get proTitle => 'Ovvas Pro';
 
   @override
-  String get plusBody => 'Unlimited widgets. One-time or yearly. Never ads.';
+  String get proBody =>
+      'No ads, unlimited widgets and premium widget styles. Yearly or one-time.';
 
   @override
   String get learnMore => 'Learn more';
@@ -977,7 +978,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get storeNeverBody =>
-      'No ads, analytics, trackers or crash reporting. No location, contacts, photos, camera or microphone. Your data is never sold or shared.';
+      'No analytics, extra trackers or crash reporting. No location, contacts, photos, camera or microphone. Your habits and notes are never sold, shared or used for ads.';
 
   @override
   String get storeExportTitle => 'Files you export';
@@ -1003,14 +1004,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get policyCollectBody =>
-      '• Without an account: nothing leaves your phone. Habits, check-ins, notes, widgets and settings are stored only on your device.\n• With an account: your email address and basic Google profile (name and photo), plus the habits, check-ins, notes and widget layouts you create.\n• We do not collect location, contacts, photos, device identifiers, usage analytics or advertising data.';
+      '• Without an account: your habits, check-ins, notes, widgets and settings are stored only on your device.\n• With an account: your email address and basic Google profile (name and photo), plus the habits, check-ins, notes and widget layouts you create.\n• Ads (free version on Android): Google AdMob, our ad service, collects your device\'s advertising ID, an approximate location from your IP address, and how you interact with ads, according to your consent choices. Ovvas Pro shows no ads.\n• We do not collect location, contacts, photos or usage analytics ourselves.';
 
   @override
   String get policyUseTitle => '2. How we use it';
 
   @override
   String get policyUseBody =>
-      'Only to run the app: to show your habits and stats, and, if you sign in, to back up your data and keep it in sync across your phones. We do not use your data for ads or profiling, and we do not read your notes.';
+      'Only to run the app: to show your habits and stats, and, if you sign in, to back up your data and keep it in sync across your phones. Ads are chosen by Google AdMob, never from your habits or notes. We do not use your data for profiling, and we do not read your notes.';
 
   @override
   String get policyStorageTitle =>
@@ -1025,7 +1026,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get policySharingBody =>
-      'We never sell, rent or trade your data. We only rely on these services to run the app:\n• Supabase: account sign-in and backup storage.\n• Google: sign-in with your Google account.\n• Google Play or the App Store: payments for Ovvas Plus. We never see your card details.\nWe may disclose data only if the law requires it.';
+      'We never sell, rent or trade your data. We only rely on these services to run the app:\n• Supabase: account sign-in and backup storage.\n• Google: sign-in with your Google account.\n• Google AdMob: shows and measures ads in the free version on Android, according to your consent choices. Change them any time in Settings → Ad privacy choices.\n• Google Play: payments for Ovvas Pro. We never see your card details.\nWe may disclose data only if the law requires it.';
 
   @override
   String get policyRetentionTitle => '5. Keeping and deleting your data';
@@ -1089,7 +1090,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get noAdsPromise => 'No ads. No trackers. Ever.';
+  String get adsPromise =>
+      'Small ads on Today and Stats only, never during a check-in. Ovvas Pro removes them.';
 
   @override
   String get signIn => 'Sign in with Google';
@@ -1152,4 +1154,101 @@ class AppLocalizationsEn extends AppLocalizations {
   String weeklyReportBody(int percent) {
     return 'Last week: $percent% of your habits done.';
   }
+
+  @override
+  String get adLabel => 'Ad';
+
+  @override
+  String get rewardsTitle => 'Rewards';
+
+  @override
+  String get rewardsSubtitle => 'Unlock premium widget styles';
+
+  @override
+  String get rewardsIntro =>
+      'Watch a short video to unlock premium widget styles. It is always optional: everything else in Ovvas stays free.';
+
+  @override
+  String get rewardStylesTitle => 'Premium widget styles';
+
+  @override
+  String rewardStylesBody(int hours) {
+    return 'Accent theme and gradient background for your widgets, for $hours hours per video.';
+  }
+
+  @override
+  String rewardProgress(int views, int total) {
+    return '$views of $total videos watched. At $total, the styles stay unlocked for good.';
+  }
+
+  @override
+  String rewardUnlockedUntil(String time) {
+    return 'Unlocked until $time';
+  }
+
+  @override
+  String get rewardUnlockedForever => 'Unlocked for good';
+
+  @override
+  String get watchVideo => 'Watch a video';
+
+  @override
+  String videosLeftToday(int count) {
+    return '$count videos left today';
+  }
+
+  @override
+  String get dailyLimitReached =>
+      'That\'s all for today. Come back tomorrow for more.';
+
+  @override
+  String get adNotAvailable => 'Try again later';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get rewardGranted => 'Unlocked! Your premium widget styles are ready.';
+
+  @override
+  String get proActive => 'You have Ovvas Pro. Thank you for supporting Ovvas!';
+
+  @override
+  String get getPro => 'Get Pro';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String get restoreDone => 'Purchases restored.';
+
+  @override
+  String get restoreNone =>
+      'No Ovvas Pro purchase found for this Google account.';
+
+  @override
+  String get storeUnavailable =>
+      'Google Play isn\'t available right now. Try again later.';
+
+  @override
+  String get purchaseFailed =>
+      'The purchase didn\'t go through. Please try again.';
+
+  @override
+  String get proOnlyStyle => 'This style comes with Ovvas Pro.';
+
+  @override
+  String get unlock => 'Unlock';
+
+  @override
+  String get proTag => 'Pro';
+
+  @override
+  String get adPrivacyOptions => 'Ad privacy choices';
+
+  @override
+  String get proYearly => 'Yearly';
+
+  @override
+  String get proOneTime => 'One-time';
 }

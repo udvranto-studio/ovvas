@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
+import '../data/ads/ad_service.dart';
 import '../data/habit_store.dart';
 import '../data/settings_controller.dart';
 import '../l10n/app_localizations.dart';
@@ -13,12 +14,14 @@ class AppScope extends InheritedNotifier<Listenable> {
     super.key,
     required this.store,
     required this.settings,
+    required this.ads,
     required super.notifier,
     required super.child,
   });
 
   final HabitStore store;
   final SettingsController settings;
+  final AdService ads;
 
   static AppScope of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<AppScope>()!;
 
@@ -28,6 +31,7 @@ class AppScope extends InheritedNotifier<Listenable> {
 extension AppContext on BuildContext {
   HabitStore get store => AppScope.of(this).store;
   SettingsController get settings => AppScope.of(this).settings;
+  AdService get ads => AppScope.of(this).ads;
   AppLocalizations get l10n => AppLocalizations.of(this);
   AppColors get colors => Theme.of(this).extension<AppColors>()!;
 

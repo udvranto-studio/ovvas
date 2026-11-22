@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../app/app_scope.dart';
+import '../../data/ads/ad_service.dart';
 import '../../domain/dates.dart';
 import '../../domain/habit.dart';
 import '../../domain/stats.dart';
+import '../ads/ad_banner.dart';
 import '../common/charts.dart';
 import '../common/components.dart';
 import '../../core/theme/habit_palette.dart';
@@ -135,6 +137,10 @@ class _TodayScreenState extends State<TodayScreen> {
                 ]),
               ),
             ),
+          // Cards end with 12dp of padding, so the banner sits 36dp below the
+          // check buttons. The list's bottom padding clears the add button
+          // and the navigation bar.
+          const AdBanner(placement: AdPlacement.todayBanner),
         ],
       ),
     );

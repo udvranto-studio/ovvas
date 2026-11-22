@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app_scope.dart';
 import '../../core/theme/app_colors.dart';
 import '../../domain/widget_config.dart';
+import '../ads/rewards_screen.dart';
 import '../common/components.dart';
 import '../common/motion.dart';
 import '../common/format.dart';
@@ -23,7 +24,27 @@ class WidgetBuilderScreen extends StatefulWidget {
 class _WidgetBuilderScreenState extends State<WidgetBuilderScreen> {
   late WidgetConfig _config = widget.initial;
 
-  void _set(WidgetConfig next) => setState(() => _config = next);
+  void _set(WidgetConfig next) {
+    // The accent theme and gradient background are premium styles: Pro, or a
+    // rewarded video, unlocks them. Widgets that already use them keep them.
+    final picksPremium = (next.theme == WidgetTheme.accent && _config.theme != WidgetTheme.accent) ||
+        (next.background == WidgetBackground.gradient && _config.background != WidgetBackground.gradient);
+    final ads = context.ads;
+    if (picksPremium && !ads.premiumStylesUnlocked) {
+      final l = context.l10n;
+      context.showSnack(
+        l.proOnlyStyle,
+        actionLabel: l.unlock,
+        onAction: () => ads.rewardsAvailable ? openRewards(context) : showProSheet(context),
+      );
+      return;
+    }
+    setState(() => _config = next);
+  }
+
+  /// Adds "· Pro" to a premium option's label while it is locked.
+  String _premium(String label) =>
+      context.ads.premiumStylesUnlocked ? label : '$label · ${context.l10n.proTag}';
 
   void _setKind(WidgetKind kind) {
     final ids = context.store.habits.map((h) => h.id).toList();
@@ -157,6 +178,7 @@ class _WidgetBuilderScreenState extends State<WidgetBuilderScreen> {
                 FieldLabel(l.theme),
                 _ThemeSwatches(
                   value: _config.theme,
+                  accentLabel: _premium(l.themeAccent),
                   onChanged: (t) => _set(_config.copyWith(theme: t)),
                 ),
                 FieldLabel(l.background),
@@ -164,7 +186,7 @@ class _WidgetBuilderScreenState extends State<WidgetBuilderScreen> {
                   value: _config.background,
                   options: [
                     (WidgetBackground.solid, l.bgSolid),
-                    (WidgetBackground.gradient, l.bgGradient),
+                    (WidgetBackground.gradient, _premium(l.bgGradient)),
                     (WidgetBackground.transparent, l.bgTransparent),
                   ],
                   onChanged: (b) =>
@@ -370,9 +392,10 @@ class _HabitPicker extends StatelessWidget {
 }
 
 class _ThemeSwatches extends StatelessWidget {
-  const _ThemeSwatches({required this.value, required this.onChanged});
+  const _ThemeSwatches({required this.value, required this.accentLabel, required this.onChanged});
 
   final WidgetTheme value;
+  final String accentLabel;
   final ValueChanged<WidgetTheme> onChanged;
 
   @override
@@ -397,7 +420,7 @@ class _ThemeSwatches extends StatelessWidget {
           ),
         ),
       ),
-      (WidgetTheme.accent, l.themeAccent, _swatch(c.primary)),
+      (WidgetTheme.accent, accentLabel, _swatch(c.primary)),
     ];
     return Row(
       children: [

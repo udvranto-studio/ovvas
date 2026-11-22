@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_scope.dart';
 import '../../core/theme/habit_palette.dart';
+import '../../data/ads/ad_service.dart';
 import '../../domain/dates.dart';
 import '../../domain/habit.dart';
 import '../../domain/stats.dart';
+import '../ads/ad_banner.dart';
 import '../common/charts.dart';
 import '../common/components.dart';
 import '../common/motion.dart';
@@ -246,6 +248,7 @@ class _StatsScreenState extends State<StatsScreen> {
               padding: const EdgeInsets.only(bottom: 10),
               child: _HabitRow(stat: s),
             ),
+          const AdBanner(placement: AdPlacement.statsBanner),
         ]),
       ),
     );

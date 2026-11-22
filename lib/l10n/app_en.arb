@@ -458,7 +458,7 @@
   "removeWidgetBody": "Your habits and history stay safe.",
   "remove": "Remove",
   "widgetLimitTitle": "Widget limit reached",
-  "widgetLimitBody": "The free version includes {limit} widgets with every option. Remove one to add another, or get Plus for unlimited widgets.",
+  "widgetLimitBody": "The free version includes {limit} widgets with every option. Remove one to add another, or get Pro for unlimited widgets.",
   "@widgetLimitBody": {
     "placeholders": {
       "limit": {
@@ -595,8 +595,8 @@
   "archivedHabits": "Archived habits",
   "noArchivedTitle": "Nothing archived",
   "noArchivedBody": "Archived habits keep their history and can come back anytime.",
-  "plusTitle": "Ovvas Plus",
-  "plusBody": "Unlimited widgets. One-time or yearly. Never ads.",
+  "proTitle": "Ovvas Pro",
+  "proBody": "No ads, unlimited widgets and premium widget styles. Yearly or one-time.",
   "learnMore": "Learn more",
   "privacy": "Privacy",
   "whatWeStore": "What we store",
@@ -609,7 +609,7 @@
   "storeAccountTitle": "Your account",
   "storeAccountBody": "Signing in with Google gives us your email address and basic profile (name and photo) to create your account. We never see your Google password.",
   "storeNeverTitle": "What we never collect",
-  "storeNeverBody": "No ads, analytics, trackers or crash reporting. No location, contacts, photos, camera or microphone. Your data is never sold or shared.",
+  "storeNeverBody": "No analytics, extra trackers or crash reporting. No location, contacts, photos, camera or microphone. Your habits and notes are never sold, shared or used for ads.",
   "storeExportTitle": "Files you export",
   "storeExportBody": "Export file creates a PDF of your habits and history. It goes only where you save it, so anyone you share it with can read it.",
   "readFullPolicy": "Read the full privacy policy",
@@ -623,13 +623,13 @@
   },
   "privacyIntro": "Ovvas is a habit tracker made to work without collecting your data. This policy explains what the app stores, why, and the choices you have.",
   "policyCollectTitle": "1. Information we collect",
-  "policyCollectBody": "• Without an account: nothing leaves your phone. Habits, check-ins, notes, widgets and settings are stored only on your device.\n• With an account: your email address and basic Google profile (name and photo), plus the habits, check-ins, notes and widget layouts you create.\n• We do not collect location, contacts, photos, device identifiers, usage analytics or advertising data.",
+  "policyCollectBody": "• Without an account: your habits, check-ins, notes, widgets and settings are stored only on your device.\n• With an account: your email address and basic Google profile (name and photo), plus the habits, check-ins, notes and widget layouts you create.\n• Ads (free version on Android): Google AdMob, our ad service, collects your device's advertising ID, an approximate location from your IP address, and how you interact with ads, according to your consent choices. Ovvas Pro shows no ads.\n• We do not collect location, contacts, photos or usage analytics ourselves.",
   "policyUseTitle": "2. How we use it",
-  "policyUseBody": "Only to run the app: to show your habits and stats, and, if you sign in, to back up your data and keep it in sync across your phones. We do not use your data for ads or profiling, and we do not read your notes.",
+  "policyUseBody": "Only to run the app: to show your habits and stats, and, if you sign in, to back up your data and keep it in sync across your phones. Ads are chosen by Google AdMob, never from your habits or notes. We do not use your data for profiling, and we do not read your notes.",
   "policyStorageTitle": "3. Where it is stored and how it is protected",
   "policyStorageBody": "Data on your phone stays in the app's private storage. Backups are stored with Supabase, our hosting provider. Data travels over encrypted connections (HTTPS), and access rules on the server make sure only your account can read or change your data.",
   "policySharingTitle": "4. Sharing",
-  "policySharingBody": "We never sell, rent or trade your data. We only rely on these services to run the app:\n• Supabase: account sign-in and backup storage.\n• Google: sign-in with your Google account.\n• Google Play or the App Store: payments for Ovvas Plus. We never see your card details.\nWe may disclose data only if the law requires it.",
+  "policySharingBody": "We never sell, rent or trade your data. We only rely on these services to run the app:\n• Supabase: account sign-in and backup storage.\n• Google: sign-in with your Google account.\n• Google AdMob: shows and measures ads in the free version on Android, according to your consent choices. Change them any time in Settings → Ad privacy choices.\n• Google Play: payments for Ovvas Pro. We never see your card details.\nWe may disclose data only if the law requires it.",
   "policyRetentionTitle": "5. Keeping and deleting your data",
   "policyRetentionBody": "• Data on your phone stays until you delete it or uninstall the app.\n• Backups are kept while your account exists.\n• Signing out stops backups but keeps the data on your phone.\n• Deleting your account removes the account and all backed-up data from our server.",
   "policyChoicesTitle": "6. Your choices",
@@ -661,7 +661,7 @@
       }
     }
   },
-  "noAdsPromise": "No ads. No trackers. Ever.",
+  "adsPromise": "Small ads on Today and Stats only, never during a check-in. Ovvas Pro removes them.",
   "signIn": "Sign in with Google",
   "signInHint": "Back up your progress and restore it on any phone",
   "signedOutMessage": "Signed out. Your progress stays on this phone.",
@@ -695,5 +695,64 @@
         "type": "int"
       }
     }
-  }
+  },
+  "adLabel": "Ad",
+  "rewardsTitle": "Rewards",
+  "rewardsSubtitle": "Unlock premium widget styles",
+  "rewardsIntro": "Watch a short video to unlock premium widget styles. It is always optional: everything else in Ovvas stays free.",
+  "rewardStylesTitle": "Premium widget styles",
+  "rewardStylesBody": "Accent theme and gradient background for your widgets, for {hours} hours per video.",
+  "@rewardStylesBody": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardProgress": "{views} of {total} videos watched. At {total}, the styles stay unlocked for good.",
+  "@rewardProgress": {
+    "placeholders": {
+      "views": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardUnlockedUntil": "Unlocked until {time}",
+  "@rewardUnlockedUntil": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardUnlockedForever": "Unlocked for good",
+  "watchVideo": "Watch a video",
+  "videosLeftToday": "{count} videos left today",
+  "@videosLeftToday": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dailyLimitReached": "That's all for today. Come back tomorrow for more.",
+  "adNotAvailable": "Try again later",
+  "retry": "Retry",
+  "rewardGranted": "Unlocked! Your premium widget styles are ready.",
+  "proActive": "You have Ovvas Pro. Thank you for supporting Ovvas!",
+  "getPro": "Get Pro",
+  "restorePurchases": "Restore purchases",
+  "restoreDone": "Purchases restored.",
+  "restoreNone": "No Ovvas Pro purchase found for this Google account.",
+  "storeUnavailable": "Google Play isn't available right now. Try again later.",
+  "purchaseFailed": "The purchase didn't go through. Please try again.",
+  "proOnlyStyle": "This style comes with Ovvas Pro.",
+  "unlock": "Unlock",
+  "proTag": "Pro",
+  "adPrivacyOptions": "Ad privacy choices",
+  "proYearly": "Yearly",
+  "proOneTime": "One-time"
 }

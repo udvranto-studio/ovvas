@@ -1,5 +1,5 @@
 name: ovvas
-description: "Ovvas: a calm, ad-free habit tracker."
+description: "Ovvas: a calm habit tracker."
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -21,6 +21,9 @@ dependencies:
   flutter_local_notifications: ^22.3.3
   timezone: ^0.11.2
   flutter_timezone: ^5.1.1
+  google_mobile_ads: ^9.2.0
+  in_app_purchase: ^3.3.1
+  in_app_purchase_android: ^0.5.5
 
 dev_dependencies:
   flutter_test:

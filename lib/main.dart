@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'app/app.dart';
+import 'data/ads/ad_service.dart';
 import 'data/habit_store.dart';
 import 'data/local/database.dart';
 import 'data/reminders.dart';
@@ -23,6 +24,9 @@ Future<void> main() async {
   final settings = SettingsController(db: db);
   await settings.load();
 
-  runApp(OvvasApp(store: store, settings: settings));
+  // Data changes (check-ins) pause banner loading for a few seconds.
+  final ads = AdService(db: db, cloud: cloud, checkIns: store);
+  runApp(OvvasApp(store: store, settings: settings, ads: ads));
+  ads.start();
   ReminderScheduler(store, settings).start();
 }

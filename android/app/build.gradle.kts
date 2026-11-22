@@ -29,6 +29,11 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // AdMob app ID. Set ADMOB_APP_ID when building a release; the default
+        // is Google's test app ID. An empty value (unset CI secret) would crash
+        // the ads SDK at launch, so it falls back too.
+        manifestPlaceholders["admobAppId"] =
+            System.getenv("ADMOB_APP_ID")?.takeIf { it.isNotBlank() } ?: "ca-app-pub-3940256099942544~3347511713"
     }
 
     buildTypes {
