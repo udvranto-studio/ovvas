@@ -77,8 +77,6 @@ Optional. Without it, everything works and stays on the phone.
 flutter run --dart-define-from-file=supabase.env.json
 ```
 
-In VS Code, pick the **Ovvas (cloud backup)** launch configuration.
-
 How sync works: every change is saved on the phone first and marked for upload. About two seconds after a change, when the app returns to the foreground, and on **Back up now**, the app uploads marked rows and downloads rows changed elsewhere. If two phones edit the same thing, the later edit wins. Deleted items are kept as "deleted" markers so the deletion reaches every phone.
 
 ### App icon
