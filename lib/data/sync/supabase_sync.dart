@@ -45,6 +45,11 @@ class SupabaseCloudSync extends CloudSync {
   /// The account whose data this phone holds.
   static const _ownerKey = 'sync.owner';
 
+  /// Set when the owner signed out without a full backup. Their unsent rows
+  /// then belong to them only: another account signing in removes them.
+  @visibleForTesting
+  static const forcedOutKey = 'sync.forcedOut';
+
   /// Re-reads a short window before the bookmark, so rows saved by
   /// overlapping server transactions are never missed. Re-reading is harmless.
   static const _overlap = Duration(seconds: 30);
@@ -146,14 +151,23 @@ class SupabaseCloudSync extends CloudSync {
       '<p>${ok ? 'You can close this tab and go back to the app.' : 'Close this tab and try again from the app.'}</p>';
 
   @override
-  Future<void> signOut() async {
+  Future<void> signOut({bool force = false}) async {
     _debounce?.cancel();
     // Last upload, so this account's backup has everything. Data stays on
-    // the phone; see [_claimOwner] for what happens when another account
-    // signs in. If it fails, stay signed in: otherwise the unsent changes
-    // would be merged into the next account that signs in on this phone.
-    if (!await syncNow()) throw const AuthException('Could not back up before signing out.');
-    await _auth.signOut();
+    // the phone; see [claimOwner] for what happens when another account
+    // signs in.
+    if (!await syncNow()) {
+      if (!force) throw const AuthException('Could not back up before signing out.');
+      await _db.writeValue(forcedOutKey, 'true');
+    }
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      // The session is already gone from this phone; only telling the
+      // server failed, e.g. offline.
+      if (_auth.currentUser != null) rethrow;
+      debugPrint('Server sign-out failed: $e');
+    }
     await _forgetSync();
   }
 
@@ -181,15 +195,19 @@ class SupabaseCloudSync extends CloudSync {
   /// Makes sure this phone's data belongs to [userId] before syncing. When
   /// another account signs in, the previous account's data is removed from
   /// the phone (it is in that account's backup), so it never leaks into the
-  /// new account. Sign-out only succeeds after a full upload, so unsent rows
-  /// here are edits made while signed out; they are merged into the new
-  /// account so nothing is lost. Returns true when local data was removed.
-  Future<bool> _claimOwner(String userId) async {
+  /// new account. Unsent rows after a normal sign-out are edits made while
+  /// signed out; they are merged into the new account so nothing is lost.
+  /// After "sign out anyway" ([forcedOutKey]) they belong to the previous
+  /// account and are removed. Returns true when local data was removed.
+  @visibleForTesting
+  Future<bool> claimOwner(String userId) async {
     final owner = await _db.readValue(_ownerKey);
+    final forcedOut = await _db.readValue(forcedOutKey) != null;
+    await _db.writeValue(forcedOutKey, null);
     if (owner == userId) return false;
     var wiped = false;
     if (owner != null) {
-      if (await _db.hasDirtyRows) {
+      if (!forcedOut && await _db.hasDirtyRows) {
         await _db.markAllDirty();
       } else {
         await _db.wipeAll(settings: false);
@@ -229,7 +247,7 @@ class SupabaseCloudSync extends CloudSync {
         _again = false;
         final user = _auth.currentUser;
         if (user == null) return false;
-        final wiped = await _claimOwner(user.id);
+        final wiped = await claimOwner(user.id);
         await _pushAll(user.id);
         final pulled = await _pullAll();
         if (pulled || wiped) await onRemoteChange?.call();

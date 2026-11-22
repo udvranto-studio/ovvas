@@ -311,8 +311,17 @@ class SettingsScreen extends StatelessWidget {
                       await store.signOut();
                     } catch (e) {
                       debugPrint('Signing out failed: $e');
-                      if (context.mounted) context.showSnack(l.signOutFailed);
-                      return;
+                      if (!context.mounted) return;
+                      // Offline or a server problem: let the user leave anyway.
+                      final force = await confirmAction(
+                        context,
+                        title: l.signOutAnywayTitle,
+                        message: l.signOutAnywayBody,
+                        confirmLabel: l.signOutAnyway,
+                        destructive: true,
+                      );
+                      if (!force || !context.mounted) return;
+                      await store.signOut(force: true);
                     }
                     if (context.mounted) context.showSnack(l.signedOutMessage);
                   },

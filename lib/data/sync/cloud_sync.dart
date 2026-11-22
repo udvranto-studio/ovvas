@@ -20,8 +20,9 @@ abstract class CloudSync extends ChangeNotifier {
   Future<void> signIn();
 
   /// Uploads what is left, then signs out. Data stays on the phone. Throws,
-  /// staying signed in, if the upload failed.
-  Future<void> signOut();
+  /// staying signed in, if the upload failed, unless [force] is set: then
+  /// unsent changes stay for this account only.
+  Future<void> signOut({bool force = false});
 
   /// Deletes the account and its cloud data, then signs out. Does nothing
   /// when not signed in. Throws if the server refused.
@@ -57,7 +58,7 @@ class LocalOnlyCloudSync extends CloudSync {
   @override
   Future<void> signIn() async {}
   @override
-  Future<void> signOut() async {}
+  Future<void> signOut({bool force = false}) async {}
   @override
   Future<void> deleteAccount() async {}
   @override

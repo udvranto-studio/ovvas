@@ -1116,8 +1116,14 @@ class AppLocalizationsBn extends AppLocalizations {
       'অ্যাকাউন্ট মোছা যায়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।';
 
   @override
-  String get signOutFailed =>
-      'সর্বশেষ পরিবর্তন ব্যাকআপ করা যায়নি, তাই আপনি এখনও সাইন ইন আছেন। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।';
+  String get signOutAnywayTitle => 'ব্যাকআপ করা যায়নি';
+
+  @override
+  String get signOutAnywayBody =>
+      'আপনার সর্বশেষ পরিবর্তন এখনও ব্যাকআপে নেই। এখন সাইন আউট করলে সেগুলো এই ফোনে থাকবে এবং এই অ্যাকাউন্টে আবার সাইন ইন করলে আপলোড হবে। অন্য কোনো অ্যাকাউন্ট এখানে সাইন ইন করলে সেগুলো মুছে যাবে।';
+
+  @override
+  String get signOutAnyway => 'তবুও সাইন আউট';
 
   @override
   String get saveFailed =>
