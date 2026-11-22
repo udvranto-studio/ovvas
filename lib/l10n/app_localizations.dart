@@ -2065,6 +2065,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t delete your account. Check your connection and try again.'**
   String get deleteAccountFailed;
+
+  /// No description provided for @reminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Time for this habit. Tap to check in.'**
+  String get reminderBody;
+
+  /// No description provided for @dailySummaryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} habits done today'**
+  String dailySummaryBody(int done, int total);
+
+  /// No description provided for @weeklyReportBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Last week: {percent}% of your habits done.'**
+  String weeklyReportBody(int percent);
 }
 
 class _AppLocalizationsDelegate

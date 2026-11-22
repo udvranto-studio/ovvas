@@ -1113,4 +1113,17 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get deleteAccountFailed =>
       'অ্যাকাউন্ট মোছা যায়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।';
+
+  @override
+  String get reminderBody => 'এই অভ্যাসের সময় হয়েছে। চেক-ইন করতে ট্যাপ করুন।';
+
+  @override
+  String dailySummaryBody(int done, int total) {
+    return 'আজ $totalটির মধ্যে $doneটি অভ্যাস সম্পন্ন';
+  }
+
+  @override
+  String weeklyReportBody(int percent) {
+    return 'গত সপ্তাহে: আপনার $percent% অভ্যাস সম্পন্ন হয়েছে।';
+  }
 }

@@ -1131,4 +1131,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteAccountFailed =>
       'Couldn\'t delete your account. Check your connection and try again.';
+
+  @override
+  String get reminderBody => 'Time for this habit. Tap to check in.';
+
+  @override
+  String dailySummaryBody(int done, int total) {
+    return '$done of $total habits done today';
+  }
+
+  @override
+  String weeklyReportBody(int percent) {
+    return 'Last week: $percent% of your habits done.';
+  }
 }

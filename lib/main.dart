@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'app/app.dart';
 import 'data/habit_store.dart';
 import 'data/local/database.dart';
+import 'data/reminders.dart';
 import 'data/sample_data.dart';
 import 'data/settings_controller.dart';
 import 'data/sync/cloud_setup.dart';
@@ -23,4 +24,5 @@ Future<void> main() async {
   await settings.load();
 
   runApp(OvvasApp(store: store, settings: settings));
+  ReminderScheduler(store, settings).start();
 }
