@@ -57,11 +57,30 @@ class ProManager extends ChangeNotifier {
       if (!await iap.isAvailable()) return;
       await refresh();
       final r = await iap.queryProductDetails(productIds);
-      products = [...r.productDetails]..sort((a, b) => a.rawPrice.compareTo(b.rawPrice));
+      products = onePerProduct(r.productDetails);
       notifyListeners();
     } catch (e, s) {
       debugPrint('Billing unavailable: $e\n$s');
     }
+  }
+
+  /// One entry per product, cheapest first. Google Play returns a
+  /// subscription once per offer (e.g. a free trial too); keep the base plan,
+  /// so the sheet shows one honest yearly price.
+  @visibleForTesting
+  static List<ProductDetails> onePerProduct(List<ProductDetails> all) {
+    bool isBasePlan(ProductDetails p) {
+      if (p is! GooglePlayProductDetails) return true;
+      final offers = p.productDetails.subscriptionOfferDetails;
+      final i = p.subscriptionIndex;
+      return offers == null || i == null || offers[i].offerId == null;
+    }
+
+    final byId = <String, ProductDetails>{};
+    for (final p in all) {
+      if (!byId.containsKey(p.id) || isBasePlan(p)) byId[p.id] = p;
+    }
+    return byId.values.toList()..sort((a, b) => a.rawPrice.compareTo(b.rawPrice));
   }
 
   /// Asks Google Play what this account owns. Returns false, keeping the
