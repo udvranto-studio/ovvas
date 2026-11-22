@@ -291,9 +291,9 @@ class SupabaseCloudSync extends CloudSync {
   /// Returns true if anything in the local database changed.
   Future<bool> _pullAll() async {
     var changed = false;
-    changed |= await _pull('habits', _mergeHabits);
-    changed |= await _pull('entries', _mergeEntries);
-    changed |= await _pull('widget_configs', _mergeWidgets);
+    changed |= await _pull('habits', mergeHabits);
+    changed |= await _pull('entries', mergeEntries);
+    changed |= await _pull('widget_configs', mergeWidgets);
     return changed;
   }
 
@@ -315,7 +315,8 @@ class SupabaseCloudSync extends CloudSync {
     return changed;
   }
 
-  Future<bool> _mergeHabits(List<Map<String, dynamic>> rows) => _db.transaction(() async {
+  @visibleForTesting
+  Future<bool> mergeHabits(List<Map<String, dynamic>> rows) => _db.transaction(() async {
         final remote = rows.map(habitRowFromCloud).toList();
         final local = {
           for (final r in await (_db.select(_db.habits)..where((t) => t.id.isIn(remote.map((r) => r.id)))).get())
@@ -332,7 +333,8 @@ class SupabaseCloudSync extends CloudSync {
         return changed;
       });
 
-  Future<bool> _mergeEntries(List<Map<String, dynamic>> rows) => _db.transaction(() async {
+  @visibleForTesting
+  Future<bool> mergeEntries(List<Map<String, dynamic>> rows) => _db.transaction(() async {
         final remote = rows.map(entryRowFromCloud).toList();
         final habitIds = remote.map((r) => r.habitId).toSet();
         final days = remote.map((r) => r.day).toSet();
@@ -352,7 +354,8 @@ class SupabaseCloudSync extends CloudSync {
         return changed;
       });
 
-  Future<bool> _mergeWidgets(List<Map<String, dynamic>> rows) => _db.transaction(() async {
+  @visibleForTesting
+  Future<bool> mergeWidgets(List<Map<String, dynamic>> rows) => _db.transaction(() async {
         final remote = rows.map(widgetRowFromCloud).toList();
         final local = {
           for (final r in await (_db.select(_db.widgetConfigs)..where((t) => t.id.isIn(remote.map((r) => r.id)))).get())
