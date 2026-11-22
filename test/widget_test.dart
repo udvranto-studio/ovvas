@@ -8,11 +8,13 @@ import 'package:ovvas/domain/dates.dart';
 import 'package:ovvas/domain/habit.dart';
 import 'package:ovvas/ui/home_shell.dart';
 
+import 'fake_cloud_sync.dart';
+
 // Wednesday, like the mockups.
 final _now = DateTime(2026, 10, 21, 9, 30);
 
 HabitStore _sampleStore() {
-  final store = HabitStore(clock: () => _now);
+  final store = HabitStore(clock: () => _now, cloud: FakeCloudSync(clock: () => _now));
   seedSampleData(store);
   return store;
 }
@@ -104,7 +106,7 @@ Future<void> _visitEverything(WidgetTester tester) async {
 void main() {
   group('Stats', () {
     test('streak skips skipped days and stops at a miss', () {
-      final store = HabitStore(clock: () => _now);
+      final store = HabitStore(clock: () => _now, cloud: FakeCloudSync(clock: () => _now));
       final today = store.today;
       final h = Habit(id: 'a', name: 'Walk', iconIndex: 0, colorIndex: 0, startDate: addDays(today, -10));
       store.addHabit(h);
@@ -124,7 +126,7 @@ void main() {
     });
 
     test('count habits add a step per tap and undo below the target', () {
-      final store = HabitStore(clock: () => _now);
+      final store = HabitStore(clock: () => _now, cloud: FakeCloudSync(clock: () => _now));
       final h = Habit(
         id: 'w',
         name: 'Water',
@@ -173,7 +175,7 @@ void main() {
   });
 
   testWidgets('empty state offers to add the first habit', (tester) async {
-    await _pumpApp(tester, store: HabitStore(clock: () => _now));
+    await _pumpApp(tester, store: HabitStore(clock: () => _now, cloud: FakeCloudSync(clock: () => _now)));
     expect(find.text('Add your first habit'), findsOneWidget);
   });
 

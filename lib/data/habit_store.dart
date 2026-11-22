@@ -21,7 +21,7 @@ import 'sync/cloud_sync.dart';
 class HabitStore extends ChangeNotifier {
   HabitStore({DateTime Function()? clock, this._db, CloudSync? cloud})
       : _clock = clock ?? DateTime.now,
-        cloud = cloud ?? FakeCloudSync(clock: clock) {
+        cloud = cloud ?? LocalOnlyCloudSync() {
     this.cloud
       ..addListener(notifyListeners)
       ..onRemoteChange = reload;
