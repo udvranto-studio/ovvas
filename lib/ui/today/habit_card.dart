@@ -36,7 +36,7 @@ class HabitCard extends StatelessWidget {
       subtitle = _Subtle(l.skippedForDay);
     } else if (streak > 0) {
       subtitle = StreakLabel(streak, fontSize: 13);
-    } else if (stats.bestStreak(habit) > 0) {
+    } else if (store.everDone(habit)) {
       subtitle = _Subtle(l.readyToStartAgain);
     } else {
       subtitle = _Subtle(l.firstStepHint);

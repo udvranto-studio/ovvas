@@ -125,6 +125,9 @@ class HabitStore extends ChangeNotifier {
 
   DayEntry? entry(String habitId, DateTime day) => _entries[habitId]?[dateOnly(day)];
 
+  /// Whether [h] was completed on any day. Cheaper than a streak scan.
+  bool everDone(Habit h) => _entries[h.id]?.values.any((e) => !e.skipped && e.value >= h.target) ?? false;
+
   /// One-tap check. Yes/No habits flip between done and not done. Count and
   /// Time habits add one step, or step back below the target when already
   /// done. Returns true when this tap completed the habit.
