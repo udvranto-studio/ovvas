@@ -49,11 +49,19 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
-        # Without the secrets the defines are empty and the app stays local-only.
+          ADMOB_APP_ID: ${{ secrets.ADMOB_APP_ID }}
+          ADMOB_TODAY_BANNER: ${{ secrets.ADMOB_TODAY_BANNER }}
+          ADMOB_STATS_BANNER: ${{ secrets.ADMOB_STATS_BANNER }}
+          ADMOB_REWARDED: ${{ secrets.ADMOB_REWARDED }}
+        # Without the secrets the defines are empty: the app stays local-only
+        # and shows no ads. ADMOB_APP_ID is read by Gradle from the environment.
         run: >
           flutter build apk --release
           --dart-define=SUPABASE_URL="$SUPABASE_URL"
           --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
+          --dart-define=ADMOB_TODAY_BANNER="$ADMOB_TODAY_BANNER"
+          --dart-define=ADMOB_STATS_BANNER="$ADMOB_STATS_BANNER"
+          --dart-define=ADMOB_REWARDED="$ADMOB_REWARDED"
       - uses: actions/upload-artifact@v4
         with:
           name: ovvas-apk

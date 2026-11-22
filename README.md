@@ -2,7 +2,7 @@
   <img src="assets/banners/readme/minimalist-1600x500.png" alt="Ovvas — Small habits. Big changes." width="100%">
 </p>
 
-<p align="center">A calm, ad-free habit tracker built with Flutter.</p>
+<p align="center">A calm habit tracker built with Flutter. Free with a few small ads, or ad-free with Ovvas Pro.</p>
 
 <p align="center">
   <a href="https://github.com/masudibnmusa/ovvas/actions/workflows/ci.yml"><img src="https://github.com/masudibnmusa/ovvas/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI/CD"></a>
@@ -16,7 +16,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-lightgrey" alt="Platforms: Android, iOS">
   <img src="https://img.shields.io/badge/languages-English%20%7C%20%E0%A6%AC%E0%A6%BE%E0%A6%82%E0%A6%B2%E0%A6%BE-orange" alt="Languages: English, Bangla">
-  <img src="https://img.shields.io/badge/ads-none-success" alt="No ads">
   <a href="https://github.com/masudibnmusa/ovvas/commits/main"><img src="https://img.shields.io/github/last-commit/masudibnmusa/ovvas" alt="Last commit"></a>
 </p>
 
@@ -29,10 +28,12 @@
 - **Flexible schedules** — every day, chosen weekdays, or a number of times per week, with optional start and end dates.
 - **Skip days** — skipping a day doesn't break your streak or lower your completion rate.
 - **Notes** — add a note to any day's check-in.
-- **Reminders** — one or more per habit, plus a default reminder time and quiet hours.
+- **Reminders** — one or more per habit, plus a default reminder time, quiet hours, a daily summary and a weekly report.
 - **Stats** — weekly and monthly views, current and longest streaks, completion rates, and simple insights (for example, "Mondays are your hardest day").
-- **Home screen widgets** — design and preview six widget types: single habit, today list, progress ring, week strip, month heatmap, and streak counter. Each has its own sizes, themes, backgrounds, and corner styles. The free version allows 3 widgets.
+- **Home screen widgets** — design and preview six widget types: single habit, today list, progress ring, week strip, month heatmap, and streak counter. Each has its own sizes, themes, backgrounds, and corner styles. The free version allows 3 widgets; the accent theme and gradient background are premium styles.
 - **Archive or delete** — archive a habit to keep its history, or delete it completely.
+- **Ovvas Pro** — no ads, unlimited widgets and premium widget styles, as a yearly subscription or a one-time purchase (Google Play).
+- **Ads (free version, Android)** — a small banner at the end of Today and Stats, never in the first 24 hours, and optional reward videos that unlock premium widget styles. Habit tracking never needs an ad. See [Ads and Ovvas Pro](#ads-and-ovvas-pro).
 - **Personalisation** — light, dark, or system theme; in-app text size; first day of the week; haptics, animations, and celebrations on or off.
 - **Languages** — English and Bangla (বাংলা).
 
@@ -78,6 +79,31 @@ flutter run --dart-define-from-file=supabase.env.json
 ```
 
 How sync works: every change is saved on the phone first and marked for upload. About two seconds after a change, when the app returns to the foreground, and on **Back up now**, the app uploads marked rows and downloads rows changed elsewhere. If two phones edit the same thing, the later edit wins. Deleted items are kept as "deleted" markers so the deletion reaches every phone.
+
+### Ads and Ovvas Pro
+
+Follows the *Ovvas Advertising & Monetization SRS v1.1*. Android only; iOS shows no ads and doesn't sell Pro yet.
+
+- **Off until you turn it on.** Ads start switched off. The `ads` row in the `app_config` table (created by [the ads migration](supabase/migrations/20261124000000_ads.sql)) turns them on without an app update. Every install picks a random cohort bucket from 0 to 99; ads show only when `enabled` is true and the bucket is below `rollout_percent`. Roll out with 5, then 20, then 95. Stopping at 95 keeps about 5% as an ad-free control group. Builds without Supabase never see ads.
+- **Order of checks** before any ad request: remote switch and cohort, consent (Google UMP), not Pro, past the 24-hour grace period, screen visible, limits. The ad SDK isn't started until UMP allows ad requests.
+- **Where:** an adaptive banner at the end of Today and Stats, and reward videos on the Rewards screen (Settings → Rewards). No other screen shows ads.
+- **Rewards:** each video unlocks the premium widget styles for `reward_hours` (24 to 168). After `reward_views_for_permanent` videos they stay unlocked. At most 5 videos a day, reset at local midnight. Turning the phone's clock back doesn't extend a reward.
+- **Pro:** create the products `ovvas_pro_yearly` (subscription) and `ovvas_pro_lifetime` (one-time) in the Play Console. Pro status is saved on the phone and works offline; Settings → Ovvas Pro → **Restore purchases** brings it to a new phone.
+
+**Before release:**
+
+1. Create the AdMob app and three ad units (Today banner, Stats banner, rewarded). In AdMob, set both banner units to refresh every 60 seconds or more.
+2. Build with the real IDs. Without them, a release build shows no ads; debug builds use Google's test ads.
+
+```bash
+ADMOB_APP_ID=ca-app-pub-xxx~yyy flutter build apk --release \
+  --dart-define=ADMOB_TODAY_BANNER=ca-app-pub-xxx/111 \
+  --dart-define=ADMOB_STATS_BANNER=ca-app-pub-xxx/222 \
+  --dart-define=ADMOB_REWARDED=ca-app-pub-xxx/333
+```
+
+3. Set up the UMP consent message (AdMob → Privacy & messaging). Settings shows **Ad privacy choices** when UMP requires it.
+4. Fill in the Play Console Data safety form (advertising ID, ad data) and set the target audience to adults. The in-app privacy policy already describes AdMob; publish the same text at a public URL.
 
 ### App icon
 
@@ -137,6 +163,11 @@ ovvas/
 │   │   ├── habit_store.dart          # Habits, check-ins, widgets
 │   │   ├── settings_controller.dart  # User settings
 │   │   ├── sample_data.dart          # Demo habits for debug builds
+│   │   ├── reminders.dart            # Schedules reminder notifications
+│   │   ├── ads/
+│   │   │   ├── ad_rules.dart         # Ad eligibility, remote values, reward limits (pure)
+│   │   │   ├── ad_service.dart       # Consent, SDK start, banners, reward videos
+│   │   │   └── pro_manager.dart      # Ovvas Pro through Google Play Billing
 │   │   ├── local/
 │   │   │   ├── database.dart         # Drift tables
 │   │   │   ├── database.g.dart       # Generated by build_runner
@@ -156,6 +187,7 @@ ovvas/
 │       ├── stats/                    # Stats screen
 │       ├── widgets/                  # Widget gallery, builder, previews
 │       ├── settings/                 # Settings screen
+│       ├── ads/                      # Banner, Rewards screen, Pro card and sheet
 │       └── common/                   # Shared components, charts, dialogs, formatting
 ├── test/
 │   ├── widget_test.dart              # Every screen, both themes and languages
@@ -188,8 +220,9 @@ GitHub Actions runs [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
 - `SUPABASE_URL`
 - `SUPABASE_PUBLISHABLE_KEY`
+- `ADMOB_APP_ID`, `ADMOB_TODAY_BANNER`, `ADMOB_STATS_BANNER`, `ADMOB_REWARDED`
 
-Without them, the built APK keeps data on the phone only.
+Without the Supabase secrets, the built APK keeps data on the phone only. Without the AdMob secrets, it shows no ads.
 
 **Making a release:**
 
