@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_theme.dart';
+import '../data/ads/ad_service.dart';
 import '../data/habit_store.dart';
 import '../data/settings_controller.dart';
 import '../l10n/app_localizations.dart';
@@ -9,17 +10,21 @@ import '../ui/home_shell.dart';
 import 'app_scope.dart';
 
 class OvvasApp extends StatefulWidget {
-  const OvvasApp({super.key, required this.store, required this.settings});
+  const OvvasApp({super.key, required this.store, required this.settings, this.ads});
 
   final HabitStore store;
   final SettingsController settings;
+
+  /// Ads and Pro. Without one (tests), no ads are shown.
+  final AdService? ads;
 
   @override
   State<OvvasApp> createState() => _OvvasAppState();
 }
 
 class _OvvasAppState extends State<OvvasApp> {
-  late final Listenable _changes = Listenable.merge([widget.store, widget.settings]);
+  late final AdService _ads = widget.ads ?? AdService();
+  late final Listenable _changes = Listenable.merge([widget.store, widget.settings, _ads]);
   final _lightTheme = buildTheme(AppColors.light);
   final _darkTheme = buildTheme(AppColors.dark);
 
@@ -43,6 +48,7 @@ class _OvvasAppState extends State<OvvasApp> {
     return AppScope(
       store: widget.store,
       settings: widget.settings,
+      ads: _ads,
       notifier: _changes,
       child: ListenableBuilder(
         listenable: widget.settings,

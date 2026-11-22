@@ -244,6 +244,34 @@ class SupabaseCloudSync extends CloudSync {
     return ok;
   }
 
+  // ---- Ads ----
+
+  @override
+  Future<Map<String, dynamic>?> fetchAdConfig() async {
+    try {
+      final row = await _client.from('app_config').select('value').eq('key', 'ads').maybeSingle();
+      return row?['value'] as Map<String, dynamic>?;
+    } catch (e) {
+      debugPrint('Reading ad settings failed: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<DateTime?> syncFirstSeen(DateTime local) async {
+    if (_auth.currentUser == null) return null;
+    try {
+      await _client
+          .from('account_meta')
+          .upsert({'first_seen': local.millisecondsSinceEpoch}, onConflict: 'user_id', ignoreDuplicates: true);
+      final row = await _client.from('account_meta').select('first_seen').single();
+      return DateTime.fromMillisecondsSinceEpoch(row['first_seen'] as int);
+    } catch (e) {
+      debugPrint('Syncing first launch failed: $e');
+      return null;
+    }
+  }
+
   // ---- Push ----
 
   Future<void> _pushAll(String userId) async {

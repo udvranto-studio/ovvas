@@ -1151,7 +1151,7 @@ abstract class AppLocalizations {
   /// No description provided for @widgetLimitBody.
   ///
   /// In en, this message translates to:
-  /// **'The free version includes {limit} widgets with every option. Remove one to add another, or get Plus for unlimited widgets.'**
+  /// **'The free version includes {limit} widgets with every option. Remove one to add another, or get Pro for unlimited widgets.'**
   String widgetLimitBody(int limit);
 
   /// No description provided for @widgetSingleHabit.
@@ -1718,17 +1718,17 @@ abstract class AppLocalizations {
   /// **'Archived habits keep their history and can come back anytime.'**
   String get noArchivedBody;
 
-  /// No description provided for @plusTitle.
+  /// No description provided for @proTitle.
   ///
   /// In en, this message translates to:
-  /// **'Ovvas Plus'**
-  String get plusTitle;
+  /// **'Ovvas Pro'**
+  String get proTitle;
 
-  /// No description provided for @plusBody.
+  /// No description provided for @proBody.
   ///
   /// In en, this message translates to:
-  /// **'Unlimited widgets. One-time or yearly. Never ads.'**
-  String get plusBody;
+  /// **'No ads, unlimited widgets and premium widget styles. Yearly or one-time.'**
+  String get proBody;
 
   /// No description provided for @learnMore.
   ///
@@ -1805,7 +1805,7 @@ abstract class AppLocalizations {
   /// No description provided for @storeNeverBody.
   ///
   /// In en, this message translates to:
-  /// **'No ads, analytics, trackers or crash reporting. No location, contacts, photos, camera or microphone. Your data is never sold or shared.'**
+  /// **'No analytics, extra trackers or crash reporting. No location, contacts, photos, camera or microphone. Your habits and notes are never sold, shared or used for ads.'**
   String get storeNeverBody;
 
   /// No description provided for @storeExportTitle.
@@ -1847,7 +1847,7 @@ abstract class AppLocalizations {
   /// No description provided for @policyCollectBody.
   ///
   /// In en, this message translates to:
-  /// **'• Without an account: nothing leaves your phone. Habits, check-ins, notes, widgets and settings are stored only on your device.\n• With an account: your email address and basic Google profile (name and photo), plus the habits, check-ins, notes and widget layouts you create.\n• We do not collect location, contacts, photos, device identifiers, usage analytics or advertising data.'**
+  /// **'• Without an account: your habits, check-ins, notes, widgets and settings are stored only on your device.\n• With an account: your email address and basic Google profile (name and photo), plus the habits, check-ins, notes and widget layouts you create.\n• Ads (free version on Android): Google AdMob, our ad service, collects your device\'s advertising ID, an approximate location from your IP address, and how you interact with ads, according to your consent choices. Ovvas Pro shows no ads.\n• We do not collect location, contacts, photos or usage analytics ourselves.'**
   String get policyCollectBody;
 
   /// No description provided for @policyUseTitle.
@@ -1859,7 +1859,7 @@ abstract class AppLocalizations {
   /// No description provided for @policyUseBody.
   ///
   /// In en, this message translates to:
-  /// **'Only to run the app: to show your habits and stats, and, if you sign in, to back up your data and keep it in sync across your phones. We do not use your data for ads or profiling, and we do not read your notes.'**
+  /// **'Only to run the app: to show your habits and stats, and, if you sign in, to back up your data and keep it in sync across your phones. Ads are chosen by Google AdMob, never from your habits or notes. We do not use your data for profiling, and we do not read your notes.'**
   String get policyUseBody;
 
   /// No description provided for @policyStorageTitle.
@@ -1883,7 +1883,7 @@ abstract class AppLocalizations {
   /// No description provided for @policySharingBody.
   ///
   /// In en, this message translates to:
-  /// **'We never sell, rent or trade your data. We only rely on these services to run the app:\n• Supabase: account sign-in and backup storage.\n• Google: sign-in with your Google account.\n• Google Play or the App Store: payments for Ovvas Plus. We never see your card details.\nWe may disclose data only if the law requires it.'**
+  /// **'We never sell, rent or trade your data. We only rely on these services to run the app:\n• Supabase: account sign-in and backup storage.\n• Google: sign-in with your Google account.\n• Google AdMob: shows and measures ads in the free version on Android, according to your consent choices. Change them any time in Settings → Ad privacy choices.\n• Google Play: payments for Ovvas Pro. We never see your card details.\nWe may disclose data only if the law requires it.'**
   String get policySharingBody;
 
   /// No description provided for @policyRetentionTitle.
@@ -1988,11 +1988,11 @@ abstract class AppLocalizations {
   /// **'Ovvas {version}'**
   String versionLabel(String version);
 
-  /// No description provided for @noAdsPromise.
+  /// No description provided for @adsPromise.
   ///
   /// In en, this message translates to:
-  /// **'No ads. No trackers. Ever.'**
-  String get noAdsPromise;
+  /// **'Small ads on Today and Stats only, never during a check-in. Ovvas Pro removes them.'**
+  String get adsPromise;
 
   /// No description provided for @signIn.
   ///
@@ -2095,6 +2095,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last week: {percent}% of your habits done.'**
   String weeklyReportBody(int percent);
+
+  /// No description provided for @adLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad'**
+  String get adLabel;
+
+  /// No description provided for @rewardsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rewards'**
+  String get rewardsTitle;
+
+  /// No description provided for @rewardsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock premium widget styles'**
+  String get rewardsSubtitle;
+
+  /// No description provided for @rewardsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch a short video to unlock premium widget styles. It is always optional: everything else in Ovvas stays free.'**
+  String get rewardsIntro;
+
+  /// No description provided for @rewardStylesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium widget styles'**
+  String get rewardStylesTitle;
+
+  /// No description provided for @rewardStylesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent theme and gradient background for your widgets, for {hours} hours per video.'**
+  String rewardStylesBody(int hours);
+
+  /// No description provided for @rewardProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{views} of {total} videos watched. At {total}, the styles stay unlocked for good.'**
+  String rewardProgress(int views, int total);
+
+  /// No description provided for @rewardUnlockedUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocked until {time}'**
+  String rewardUnlockedUntil(String time);
+
+  /// No description provided for @rewardUnlockedForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocked for good'**
+  String get rewardUnlockedForever;
+
+  /// No description provided for @watchVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch a video'**
+  String get watchVideo;
+
+  /// No description provided for @videosLeftToday.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} videos left today'**
+  String videosLeftToday(int count);
+
+  /// No description provided for @dailyLimitReached.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s all for today. Come back tomorrow for more.'**
+  String get dailyLimitReached;
+
+  /// No description provided for @adNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again later'**
+  String get adNotAvailable;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @rewardGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocked! Your premium widget styles are ready.'**
+  String get rewardGranted;
+
+  /// No description provided for @proActive.
+  ///
+  /// In en, this message translates to:
+  /// **'You have Ovvas Pro. Thank you for supporting Ovvas!'**
+  String get proActive;
+
+  /// No description provided for @getPro.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Pro'**
+  String get getPro;
+
+  /// No description provided for @restorePurchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get restorePurchases;
+
+  /// No description provided for @restoreDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases restored.'**
+  String get restoreDone;
+
+  /// No description provided for @restoreNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No Ovvas Pro purchase found for this Google account.'**
+  String get restoreNone;
+
+  /// No description provided for @storeUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Play isn\'t available right now. Try again later.'**
+  String get storeUnavailable;
+
+  /// No description provided for @purchaseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The purchase didn\'t go through. Please try again.'**
+  String get purchaseFailed;
+
+  /// No description provided for @proOnlyStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'This style comes with Ovvas Pro.'**
+  String get proOnlyStyle;
+
+  /// No description provided for @unlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get unlock;
+
+  /// No description provided for @proTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro'**
+  String get proTag;
+
+  /// No description provided for @adPrivacyOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad privacy choices'**
+  String get adPrivacyOptions;
+
+  /// No description provided for @proYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get proYearly;
+
+  /// No description provided for @proOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time'**
+  String get proOneTime;
 }
 
 class _AppLocalizationsDelegate

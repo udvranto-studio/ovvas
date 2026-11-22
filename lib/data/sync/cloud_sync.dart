@@ -33,6 +33,15 @@ abstract class CloudSync extends ChangeNotifier {
 
   /// Called after every local change. Implementations should batch these.
   void requestSync();
+
+  /// Ad settings from the server (the remote switch and limits), or null
+  /// when there is no server or it can't be reached.
+  Future<Map<String, dynamic>?> fetchAdConfig() async => null;
+
+  /// Saves [local] as this account's first launch, unless an earlier one is
+  /// stored, and returns the stored one. Null when not signed in or offline.
+  /// Keeps the no-ads grace period from restarting on a reinstall.
+  Future<DateTime?> syncFirstSeen(DateTime local) async => null;
 }
 
 /// Used when no cloud backend is configured. Data stays on the phone.

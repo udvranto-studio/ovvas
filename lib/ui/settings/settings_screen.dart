@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../app/app_scope.dart';
+import '../../data/ads/ad_service.dart';
 import '../../core/theme/habit_palette.dart';
 import '../../data/settings_controller.dart';
 import '../../domain/habit.dart';
+import '../ads/rewards_screen.dart';
 import '../common/components.dart';
 import '../common/motion.dart';
 import '../common/dialogs.dart';
@@ -29,6 +31,7 @@ class SettingsScreen extends StatelessWidget {
     final s = context.settings;
     final l = context.l10n;
     final c = context.colors;
+    final ads = context.ads;
     void soon() => context.showSnack(l.availableWithCloud);
 
     return SafeArea(
@@ -255,40 +258,22 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
 
-          // Plus: one quiet card.
+          // Pro: one quiet card, and optional rewards when ads are on.
           const SizedBox(height: 24),
-          AppCard(
-            color: c.mint,
-            child: Row(
+          const ProCard(),
+          if (ads.rewardsAvailable) ...[
+            const SizedBox(height: 12),
+            _Group(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset('assets/brand/logo_mark.png', width: 44, height: 44, excludeFromSemantics: true),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l.plusTitle,
-                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: c.onMint),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(l.plusBody, style: TextStyle(color: c.onMint, fontSize: 14)),
-                    ],
-                  ),
-                ),
-                // Flexible so large text wraps instead of overflowing on narrow phones.
-                Flexible(
-                  child: TextButton(
-                    onPressed: soon,
-                    child: Text(l.learnMore, textAlign: TextAlign.center),
-                  ),
+                ListTile(
+                  leading: const IconBadge(Icons.card_giftcard_rounded, Accent.coral),
+                  title: Text(l.rewardsTitle),
+                  subtitle: Text(l.rewardsSubtitle),
+                  onTap: () => openRewards(context),
                 ),
               ],
             ),
-          ),
+          ],
 
           // Privacy
           SectionLabel(l.privacy),
@@ -304,6 +289,12 @@ class SettingsScreen extends StatelessWidget {
                 title: Text(l.privacyPolicy),
                 onTap: () => showPrivacyPolicy(context),
               ),
+              if (ads.privacyOptionsRequired)
+                ListTile(
+                  leading: const IconBadge(Icons.tune_rounded, Accent.sky),
+                  title: Text(l.adPrivacyOptions),
+                  onTap: ads.showPrivacyOptions,
+                ),
               if (store.signedIn)
                 ListTile(
                   leading: const IconBadge(Icons.logout_rounded, Accent.rose),
@@ -356,10 +347,12 @@ class SettingsScreen extends StatelessWidget {
             // Flutter passes `version:` from pubspec.yaml as this define.
             child: Text(l.versionLabel(const String.fromEnvironment('FLUTTER_BUILD_NAME')), style: TextStyle(color: c.textSecondary, fontSize: 12)),
           ),
-          const SizedBox(height: 4),
-          Center(
-            child: Text(l.noAdsPromise, style: TextStyle(color: c.textSecondary, fontSize: 12)),
-          ),
+          if (AdService.supported && !ads.pro.active) ...[
+            const SizedBox(height: 4),
+            Center(
+              child: Text(l.adsPromise, textAlign: TextAlign.center, style: TextStyle(color: c.textSecondary, fontSize: 12)),
+            ),
+          ],
         ]),
       ),
     );
