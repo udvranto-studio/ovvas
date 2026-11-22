@@ -140,7 +140,7 @@ class _TodayScreenState extends State<TodayScreen> {
           // Cards end with 12dp of padding, so the banner sits 36dp below the
           // check buttons. The list's bottom padding clears the add button
           // and the navigation bar.
-          const AdBanner(placement: AdPlacement.todayBanner),
+          const AdBanner(key: ValueKey('ad'), placement: AdPlacement.todayBanner),
         ],
       ),
     );
