@@ -353,7 +353,8 @@ class SettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Center(
-            child: Text(l.versionLabel('1.0.0'), style: TextStyle(color: c.textSecondary, fontSize: 12)),
+            // Flutter passes `version:` from pubspec.yaml as this define.
+            child: Text(l.versionLabel(const String.fromEnvironment('FLUTTER_BUILD_NAME')), style: TextStyle(color: c.textSecondary, fontSize: 12)),
           ),
           const SizedBox(height: 4),
           Center(
