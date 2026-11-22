@@ -53,7 +53,7 @@ class ProManager extends ChangeNotifier {
     if (!supported) return;
     try {
       final iap = InAppPurchase.instance;
-      _sub = iap.purchaseStream.listen(_onPurchases, onError: (Object e) => debugPrint('Purchase stream: $e'));
+      _sub = iap.purchaseStream.listen(onPurchases, onError: (Object e) => debugPrint('Purchase stream: $e'));
       if (!await iap.isAvailable()) return;
       await refresh();
       final r = await iap.queryProductDetails(productIds);
@@ -112,17 +112,22 @@ class ProManager extends ChangeNotifier {
     buying = true;
     purchaseFailed = false;
     notifyListeners();
+    var started = false;
     try {
-      await InAppPurchase.instance.buyNonConsumable(purchaseParam: PurchaseParam(productDetails: product));
+      started = await InAppPurchase.instance.buyNonConsumable(purchaseParam: PurchaseParam(productDetails: product));
     } catch (e) {
       debugPrint('Purchase failed to start: $e');
+    }
+    // Nothing will arrive on the purchase stream, so re-enable the buttons.
+    if (!started) {
       buying = false;
       purchaseFailed = true;
       notifyListeners();
     }
   }
 
-  Future<void> _onPurchases(List<PurchaseDetails> purchases) async {
+  @visibleForTesting
+  Future<void> onPurchases(List<PurchaseDetails> purchases) async {
     for (final p in purchases) {
       if (!productIds.contains(p.productID)) continue;
       switch (p.status) {
@@ -135,7 +140,9 @@ class ProManager extends ChangeNotifier {
         case PurchaseStatus.canceled:
           buying = false;
         case PurchaseStatus.pending:
-          break;
+          // Waiting for payment (e.g. cash). Pro turns on when it arrives,
+          // on this stream or at the next check, so free the buttons now.
+          buying = false;
       }
       // Unacknowledged Play purchases are refunded after 3 days.
       if (p.pendingCompletePurchase) await InAppPurchase.instance.completePurchase(p);

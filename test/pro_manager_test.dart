@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:ovvas/data/ads/pro_manager.dart';
 
@@ -13,6 +14,8 @@ PricingPhaseWrapper _phase(int micros, String price) => PricingPhaseWrapper(
     );
 
 void main() {
+  purchaseTests();
+
   test('a subscription with a free-trial offer is offered once, at its base price', () {
     final yearly = GooglePlayProductDetails.fromProductDetails(ProductDetailsWrapper(
       description: '',
@@ -52,5 +55,23 @@ void main() {
 
     final shown = ProManager.onePerProduct([...lifetime, ...yearly]);
     expect(shown.map((p) => (p.id, p.price)), [('ovvas_pro_yearly', r'$9.99'), ('ovvas_pro_lifetime', r'$24.99')]);
+  });
+}
+
+PurchaseDetails _purchase(PurchaseStatus status) => PurchaseDetails(
+      productID: 'ovvas_pro_yearly',
+      verificationData: PurchaseVerificationData(localVerificationData: '', serverVerificationData: '', source: 'test'),
+      transactionDate: null,
+      status: status,
+    );
+
+void purchaseTests() {
+  test('a pending purchase frees the buttons; a completed one turns Pro on', () async {
+    final pro = ProManager(null)..buying = true;
+    await pro.onPurchases([_purchase(PurchaseStatus.pending)]);
+    expect((pro.buying, pro.active), (false, false));
+
+    await pro.onPurchases([_purchase(PurchaseStatus.purchased)]);
+    expect(pro.active, isTrue);
   });
 }
